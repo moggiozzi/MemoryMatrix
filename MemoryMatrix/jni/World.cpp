@@ -18,11 +18,11 @@ void World::initLevel(){
 }
 
 void World::draw(bool isActive){
-  //GLHelper::setColor(0.6f,0.6f,1.0f);
-  //uint x = (GLHelper::getWidth() - bgTex.getWidth())/2;
-  //uint y = (GLHelper::getHeight() - bgTex.getHeight())/2;
-  //GLHelper::drawTexture(&bgTex, x, y);
-  GLHelper::setColor(1.f,1.f,1.f);
+  GLHelper::setColor(0.6f,0.6f,1.0f);
+  for(int i=0;i<rows;i++)
+    for(int j=0;j<cols;j++){
+      GLHelper::drawRect2d( j*100, i*100, j*100+90, i*100+90);
+    }
   if(!isActive)
     return;
   static char scoreText[16];

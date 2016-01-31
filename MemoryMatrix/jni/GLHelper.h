@@ -55,10 +55,12 @@ public:
   static void clear(GLfloat r=0, GLfloat g=0, GLfloat b=0, GLfloat a=1);
   static void setColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a=1);
   static void setLineWidth(GLuint w);
-  static void drawCircle2d(GLfloat x, GLfloat y, GLfloat r, uint points_number=16);
+  static void drawCircle2d(GLint x, GLint y, GLint r, uint points_number=16);
   static void drawLine2d(GLint x1, GLint y1, GLint x2, GLint y2);
-  static void drawCircleSector2d(GLfloat x, GLfloat y, GLfloat r, GLfloat a1, GLfloat a2, uint points_number=16);
-  static void drawTriangle2d(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, GLfloat x3, GLfloat y3);
+  static void drawCircleSector2d(GLint x, GLint y, GLint r, GLfloat a1, GLfloat a2, uint points_number=16);
+  static void drawTriangle2d(GLint x1, GLint y1, GLint x2, GLint y2, GLint x3, GLint y3);
+  static void drawRect2d(GLint x1, GLint y1, GLint x2, GLint y2);
+  
   static void drawTexture(Texture* texture, int dx, int dy, int dw=-1, int dh=-1,
     int tx=0, int ty=0, int tw=-1, int th=-1);
   static void drawTexture(Texture* texture, Rect<int> &dr);

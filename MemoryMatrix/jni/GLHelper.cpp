@@ -146,23 +146,27 @@ void GLHelper::drawLine2d(GLint x1, GLint y1, GLint x2, GLint y2){
   glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-void GLHelper::drawCircle2d(GLfloat x, GLfloat y, GLfloat r, uint points_number){
+void GLHelper::drawCircle2d(GLint x, GLint y, GLint r, uint points_number){
+  glEnableClientState(GL_VERTEX_ARRAY);
   if((points_number+2)*2>MAX_POINTS_COUNT) points_number=(MAX_POINTS_COUNT-2)/2;
-  points_[0]=x; //центр круга
-  points_[1]=y;
+  points_[0]=xToGl(x); //центр круга
+  points_[1]=yToGl(y);
   float angle;
   for(unsigned int i=0; i<points_number+1; i++){	//+1 замыкающая точка
     angle = static_cast<GLfloat>(2*M_PI*i/points_number);
-    points_[i*2+2] = x + r*cos(angle);
-    points_[i*2+3] = y + r*sin(angle);
+    points_[i*2+2] = xToGl(x + r*cos(angle));
+    points_[i*2+3] = yToGl(y + r*sin(angle));
   }
+  glVertexPointer( 2, GL_FLOAT, 0, points_ ); //2 координаты на точку
   glDrawArrays( GL_TRIANGLE_FAN, 0, points_number+2 );
+  glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-void GLHelper::drawCircleSector2d(GLfloat x, GLfloat y, GLfloat r, GLfloat a1, GLfloat a2, uint points_number){
+void GLHelper::drawCircleSector2d(GLint x, GLint y, GLint r, GLfloat a1, GLfloat a2, uint points_number){
+  glEnableClientState(GL_VERTEX_ARRAY);
   if((points_number+2)*2>MAX_POINTS_COUNT) points_number=(MAX_POINTS_COUNT-2)/2;
-  points_[0]=x; //центр круга
-  points_[1]=y;
+  points_[0]=xToGl(x); //центр круга
+  points_[1]=yToGl(y);
   a1 = static_cast<GLfloat>(gradToRad(a1));
   a2 = static_cast<GLfloat>(gradToRad(a2));
   float angle = a1;
@@ -172,21 +176,41 @@ void GLHelper::drawCircleSector2d(GLfloat x, GLfloat y, GLfloat r, GLfloat a1, G
   else
     angleStep = static_cast<GLfloat>((2*M_PI+a2-a1)/points_number);
   for(uint i=0; i<points_number+1; i++){
-    points_[i*2+2] = x + r*cos(angle);
-    points_[i*2+3] = y + r*sin(angle);
+    points_[i*2+2] = xToGl(x + r*cos(angle));
+    points_[i*2+3] = yToGl(y + r*sin(angle));
     angle += angleStep;
   }
+  glVertexPointer( 2, GL_FLOAT, 0, points_ ); //2 координаты на точку
   glDrawArrays( GL_TRIANGLE_FAN, 0, points_number+2 );
+  glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-void GLHelper::drawTriangle2d(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, GLfloat x3, GLfloat y3){
-  points_[0]=x1;
-  points_[1]=y1;
-  points_[2]=x2;
-  points_[3]=y2;
-  points_[4]=x3;
-  points_[5]=y3;
+void GLHelper::drawTriangle2d(GLint x1, GLint y1, GLint x2, GLint y2, GLint x3, GLint y3){
+  glEnableClientState(GL_VERTEX_ARRAY);
+  points_[0]=xToGl(x1);
+  points_[1]=yToGl(y1);
+  points_[2]=xToGl(x2);
+  points_[3]=yToGl(y2);
+  points_[4]=xToGl(x3);
+  points_[5]=yToGl(y3);
+  glVertexPointer( 2, GL_FLOAT, 0, points_ ); //2 координаты на точку
   glDrawArrays( GL_TRIANGLE_FAN, 0, 3 );
+  glDisableClientState(GL_VERTEX_ARRAY);
+}
+
+void GLHelper::drawRect2d(GLint x1, GLint y1, GLint x2, GLint y2){
+  glEnableClientState(GL_VERTEX_ARRAY);
+  points_[0]=xToGl(x1);
+  points_[1]=yToGl(y1);
+  points_[2]=xToGl(x2);
+  points_[3]=yToGl(y1);
+  points_[4]=xToGl(x2);
+  points_[5]=yToGl(y2);
+  points_[6]=xToGl(x1);
+  points_[7]=yToGl(y2);
+  glVertexPointer( 2, GL_FLOAT, 0, points_ ); //2 координаты на точку
+  glDrawArrays( GL_TRIANGLE_FAN, 0, 4 );
+  glDisableClientState(GL_VERTEX_ARRAY);
 }
 
 void GLHelper::drawTexture(Texture* texture, Rect<int> &dr){

@@ -31,11 +31,6 @@ void Game::drawFps(){
 void Game::draw(){
   GLHelper::clear(0, 0, 0);
 
-  GLHelper::setColor(1.f,1.f,1.0f);
-  uint x = (GLHelper::getWidth() - bgTex.getWidth())/2;
-  uint y = (GLHelper::getHeight() - bgTex.getHeight())/2;
-  GLHelper::drawTexture(&bgTex, x, y);
-
   GameState gState = getGameState();
   switch (gState)
   {
@@ -51,7 +46,7 @@ void Game::draw(){
     menu.draw();
     break;
   }
-  drawFps();
+  //drawFps();
   GLHelper::swapBuffers();
 }
 

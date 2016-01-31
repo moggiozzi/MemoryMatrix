@@ -8,8 +8,9 @@
 class World{
   Vector2<int> bottomLeft; // координаты нижней левой точки с которой надо рисовать "мир"
   uint score;
+  uint rows,cols; // количество ячеек
 public:
-  World() {}
+  World() : rows(2),cols(2) {}
   ~World(){}
   //Vector2f getSize(){return size;}
   bool init();
