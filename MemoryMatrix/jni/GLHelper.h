@@ -30,9 +30,11 @@ class GLHelper{
   static int height;
   static Texture fontTexture;
 
+public:
   static GLfloat xToGl(int x);
   static GLfloat yToGl(int y);
-public:
+  static int glToX(GLfloat x);
+  static int glToY(GLfloat y);
 #ifdef __ANDROID__
   static EGLDisplay display;
   static EGLSurface surface;

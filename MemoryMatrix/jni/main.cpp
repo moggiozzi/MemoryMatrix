@@ -255,8 +255,8 @@ void initGlut(int argc, char* argv[]){
 #ifdef _DEBUG
   glutInitDisplayMode( GLUT_RGB | GLUT_DOUBLE );
   glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE,GLUT_ACTION_GLUTMAINLOOP_RETURNS);
-  GLHelper::setWidth(1024);
-  GLHelper::setHeight(480);
+  //GLHelper::setWidth(1024);
+  //GLHelper::setHeight(480);
 #else
   glutInitDisplayMode( GLUT_RGB | GLUT_DOUBLE | GLUT_BORDERLESS);
   glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE,GLUT_ACTION_GLUTMAINLOOP_RETURNS);

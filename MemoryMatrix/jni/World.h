@@ -6,11 +6,10 @@
 #endif
 
 class World{
-  Vector2<int> bottomLeft; // координаты нижней левой точки с которой надо рисовать "мир"
   uint score;
-  uint rows,cols; // количество ячеек
+  enum States{ APPEAR, OPEN, SHOW, CLOSE, HIDDEN, OPEN_RESULT, SHOW_RESULT, LEAVE } state;
 public:
-  World() : rows(2),cols(2) {}
+  World() {}
   ~World(){}
   //Vector2f getSize(){return size;}
   bool init();

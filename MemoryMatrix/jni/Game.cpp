@@ -51,6 +51,8 @@ void Game::draw(){
 }
 
 void Game::update(float dt){
+  world.update(dt);
+  return;
   if ( dt <= 0 ) // ???
     return;
   if(dt>0.06f)

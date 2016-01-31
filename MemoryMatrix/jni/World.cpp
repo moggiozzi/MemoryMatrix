@@ -2,12 +2,25 @@
 #include "ResourceManager.h"
 #include "AudioHelper.h"
 #include "GameState.h"
+#include <algorithm>
 
 namespace{
   //Texture charTex;
+  int borderSize = 2;
+  float dx;
+  int boardSize;
+  int cellSize;
+  int rows, cols;
+  float x, y;
 }
 
 bool World::init(){
+  rows = 2;
+  cols = 2;
+  cellSize = std::min(GLHelper::getWidth()/cols,GLHelper::getHeight()/rows) - borderSize;//fixme
+  boardSize = (cellSize + borderSize) * cols;
+  x = GLHelper::xToGl(-boardSize); // board hidden to left
+  y = GLHelper::yToGl(( GLHelper::getHeight() - boardSize ) / 2.0);
   //ResourceManager::loadImage("res/character.png",&charTex);
   initLevel();
   return true;
@@ -19,9 +32,15 @@ void World::initLevel(){
 
 void World::draw(bool isActive){
   GLHelper::setColor(0.6f,0.6f,1.0f);
+  int devX = GLHelper::glToX(x);
+  int devY = GLHelper::glToY(y);
   for(int i=0;i<rows;i++)
     for(int j=0;j<cols;j++){
-      GLHelper::drawRect2d( j*100, i*100, j*100+90, i*100+90);
+      GLHelper::drawRect2d(
+        devX + j*(cellSize+borderSize),
+        devY + i*(cellSize+borderSize),
+        devX + j*(cellSize+borderSize) + cellSize,
+        devY + i*(cellSize+borderSize) + cellSize);
     }
   if(!isActive)
     return;
@@ -32,6 +51,28 @@ void World::draw(bool isActive){
 }
 
 void World::update(float dt){
+  float targetX = GLHelper::xToGl(( GLHelper::getWidth() - boardSize ) / 2);
+  x += 2.0*dt;
+  if ( x > targetX )
+    x = targetX;
+  switch(state){
+    case APPEAR:
+      break;
+    case OPEN:
+      break;
+    case SHOW:
+      break;
+    case CLOSE:
+      break;
+    case HIDDEN:
+      break;
+    case OPEN_RESULT:
+      break;
+    case SHOW_RESULT:
+      break;
+    case LEAVE:
+      break;
+  }
 }
 
 bool World::keyDown(uint keyCode){

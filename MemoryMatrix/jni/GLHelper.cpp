@@ -14,7 +14,8 @@ Texture GLHelper::fontTexture;
 float ratioX=1, ratioY=1;
 GLfloat GLHelper::xToGl(int x) { return ( (float)x/width-0.5f)*2.0f*ratioX; }
 GLfloat GLHelper::yToGl(int y) { return ( ((float)height-y)/height-0.5f)*2.0f*ratioY; }
-
+int GLHelper::glToX(GLfloat x) { return (x/ratioX + 1.0) * width / 2.0; }
+int GLHelper::glToY(GLfloat y) { return (1.0 - y/ratioY) * height / 2.0; }
 #ifdef __ANDROID__
 
 #include <GLES/glext.h>
@@ -82,8 +83,8 @@ void GLHelper::terminate(){
 
 #include <GL/freeglut.h>
 
-int GLHelper::width=400;
-int GLHelper::height=800;
+int GLHelper::width=640;
+int GLHelper::height=480;
 
 bool GLHelper::init() {
   setParams();
