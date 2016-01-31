@@ -13,11 +13,11 @@ bool Game::init(){
   isInit = isInit && menu.init();
   isInit = isInit && world.init();
   int sId;
-  isInit = isInit && AudioHelper::open("res/main.ogg",sId);
+  //isInit = isInit && AudioHelper::open("res/main.ogg",sId);
   AudioHelper::update();
-  AudioHelper::play(sId,false); // todo true
+  //AudioHelper::play(sId,false); // todo true
 
-  ResourceManager::loadImage("res/bg.png",&bgTex);
+  //ResourceManager::loadImage("res/bg.png",&bgTex);
   return isInit;
 }
 
@@ -25,7 +25,7 @@ void Game::drawFps(){
   static char str[16];
   sprintf(str,"fps:%d",fps.getFps());
   GLHelper::setColor(1.f,1.f,1.f);
-  GLHelper::drawText(0, 0, str);
+  GLHelper::drawText(0, 16, str);
 }
 
 void Game::draw(){
@@ -138,7 +138,7 @@ void Game::save(const char* fileName){
   saveTo(buf);
   fwrite(buf,1,size,file);
   fclose(file);
-  delete buf;
+  delete[] buf;
 }
 void Game::load(const char* fileName){
   FILE *file = fopen(fileName,"r");
@@ -151,5 +151,5 @@ void Game::load(const char* fileName){
   const char * const dataEnd = &buf[0]+size;
   loadFrom( buf, dataEnd );
   fclose(file);
-  delete buf;
+  delete[] buf;
 }

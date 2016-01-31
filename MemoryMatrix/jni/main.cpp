@@ -250,7 +250,7 @@ void draw(void)
   game.draw();
 }
 
-void initGlut(){
+void initGlut(int argc, char* argv[]){
   glutInit( &argc, argv );
 #ifdef _DEBUG
   glutInitDisplayMode( GLUT_RGB | GLUT_DOUBLE );
@@ -283,7 +283,7 @@ int main(int argc, char* argv[])
 {
   srand((uint)time(NULL));
   
-  initGlut();
+  initGlut(argc,argv);
   ResourceManager::init();
   GLHelper::init();
   AudioHelper::init();
