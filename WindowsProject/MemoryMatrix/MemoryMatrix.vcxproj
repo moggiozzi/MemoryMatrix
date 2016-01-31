@@ -12,6 +12,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\MemoryMatrix\jni\AudioHelper.cpp" />
+    <ClCompile Include="..\..\MemoryMatrix\jni\Cell.cpp" />
+    <ClCompile Include="..\..\MemoryMatrix\jni\ColorRGB.cpp" />
     <ClCompile Include="..\..\MemoryMatrix\jni\Fps.cpp" />
     <ClCompile Include="..\..\MemoryMatrix\jni\Game.cpp" />
     <ClCompile Include="..\..\MemoryMatrix\jni\GameState.cpp" />
@@ -28,6 +30,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\MemoryMatrix\jni\AudioHelper.h" />
+    <ClInclude Include="..\..\MemoryMatrix\jni\Cell.h" />
+    <ClInclude Include="..\..\MemoryMatrix\jni\ColorRGB.h" />
     <ClInclude Include="..\..\MemoryMatrix\jni\Fps.h" />
     <ClInclude Include="..\..\MemoryMatrix\jni\Game.h" />
     <ClInclude Include="..\..\MemoryMatrix\jni\GameState.h" />

@@ -77,7 +77,7 @@ void Game::update(float dt){
     break;
   }
 }
-
+void Game::reshape(){ world.reshape(); }
 bool Game::keyDown(uint keyCode){
   GameState gState = getGameState();
   switch (gState){

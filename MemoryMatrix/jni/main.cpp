@@ -219,6 +219,8 @@ void handleInput( unsigned char keyCode, int mouseX, int mouseY )
   game.keyDown( keyCode );
   if (keyCode=='f')
     glutFullScreenToggle();
+  if (keyCode==27)//ESC
+    exit(0);
 }
 
 void Idle(void)
@@ -228,8 +230,13 @@ void Idle(void)
 
 void handleReshape(int x, int y)
 {
-  //nWidth = glutGet(GLUT_WINDOW_WIDTH);
-  //nHeight = glutGet(GLUT_WINDOW_HEIGHT);
+  //todo
+  //GLHelper::setWidth(x);
+  //GLHelper::setHeight(y);
+  //game.reshape();
+
+  //int nWidth = glutGet(GLUT_WINDOW_WIDTH);
+  //int nHeight = glutGet(GLUT_WINDOW_HEIGHT);
   //glViewport(0,0,nWidth,nHeight);
   //glMatrixMode(GL_PROJECTION);
   //glLoadIdentity();

@@ -7,7 +7,6 @@
 
 class World{
   uint score;
-  enum States{ APPEAR, OPEN, SHOW, CLOSE, HIDDEN, OPEN_RESULT, SHOW_RESULT, LEAVE } state;
 public:
   World() {}
   ~World(){}
@@ -16,7 +15,8 @@ public:
   void initLevel();
   void draw(bool isActive=true);
   void update(float dt);
-
+  // Изменение размера окна
+  void reshape();
   bool keyDown(uint keyCode);
   void touch(int x, int y);
   void accel(float x, float y, float z);

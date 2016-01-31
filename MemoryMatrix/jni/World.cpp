@@ -6,21 +6,33 @@
 
 namespace{
   //Texture charTex;
-  int borderSize = 2;
+  int borderSize = 10;
   float dx;
   int boardSize;
   int cellSize;
   int rows, cols;
   float x, y;
+  enum State{ APPEAR, OPEN, SHOW, CLOSE, HIDDEN, OPEN_RESULT, SHOW_RESULT, LEAVE } state;
+}
+
+void World::reshape(){
+  //cellSize = std::min((GLHelper::getWidth()-borderSize)/cols, (GLHelper::getHeight()-borderSize)/rows) - borderSize;
+  //boardSize = (cellSize + borderSize) * cols;
+  //x = GLHelper::xToGl(( GLHelper::getWidth() - boardSize ) / 2);
+  //y = GLHelper::yToGl(( GLHelper::getHeight() - boardSize + borderSize ) / 2.0);
 }
 
 bool World::init(){
   rows = 2;
   cols = 2;
-  cellSize = std::min(GLHelper::getWidth()/cols,GLHelper::getHeight()/rows) - borderSize;//fixme
+  cellSize = std::min((GLHelper::getWidth()-borderSize)/cols, (GLHelper::getHeight()-borderSize)/rows) - borderSize;
   boardSize = (cellSize + borderSize) * cols;
   x = GLHelper::xToGl(-boardSize); // board hidden to left
-  y = GLHelper::yToGl(( GLHelper::getHeight() - boardSize ) / 2.0);
+  y = GLHelper::yToGl(( GLHelper::getHeight() - boardSize + borderSize ) / 2.0);
+  state = State::APPEAR;
+  //for(int i=0;i<rows;i++)
+  //  for(int j=0;j<cols;j++)
+  //    board[i][j]=
   //ResourceManager::loadImage("res/character.png",&charTex);
   initLevel();
   return true;
@@ -51,13 +63,15 @@ void World::draw(bool isActive){
 }
 
 void World::update(float dt){
-  float targetX = GLHelper::xToGl(( GLHelper::getWidth() - boardSize ) / 2);
-  x += 2.0*dt;
-  if ( x > targetX )
-    x = targetX;
   switch(state){
-    case APPEAR:
-      break;
+    case APPEAR:{
+      float targetX = GLHelper::xToGl(( GLHelper::getWidth() - boardSize ) / 2);
+      x += 2.0*dt;
+      if ( x > targetX ){
+        x = targetX;
+        state = OPEN;
+      }
+    }break;
     case OPEN:
       break;
     case SHOW:

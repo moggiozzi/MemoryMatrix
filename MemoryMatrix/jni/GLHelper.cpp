@@ -11,11 +11,15 @@
 bool GLHelper::isInit=false;
 float GLHelper::points_[MAX_POINTS_COUNT];
 Texture GLHelper::fontTexture;
-float ratioX=1, ratioY=1;
+float GLHelper::ratioX=1;
+float GLHelper::ratioY=1;
 GLfloat GLHelper::xToGl(int x) { return ( (float)x/width-0.5f)*2.0f*ratioX; }
 GLfloat GLHelper::yToGl(int y) { return ( ((float)height-y)/height-0.5f)*2.0f*ratioY; }
 int GLHelper::glToX(GLfloat x) { return (x/ratioX + 1.0) * width / 2.0; }
 int GLHelper::glToY(GLfloat y) { return (1.0 - y/ratioY) * height / 2.0; }
+
+void GLHelper::setWidth(int w){width=w;setRatio();}
+void GLHelper::setHeight(int h){height=h;setRatio();}
 #ifdef __ANDROID__
 
 #include <GLES/glext.h>
@@ -104,8 +108,7 @@ void GLHelper::swapBuffers(){
 #endif
 }
 
-void GLHelper::setParams(){
-  glLoadIdentity();
+void GLHelper::setRatio(){
   if ( width < height ) {
     ratioX = (float)width/height;
     ratioY = 1.0;
@@ -113,6 +116,10 @@ void GLHelper::setParams(){
     ratioX = 1.0;
     ratioY = (float)height/width;
   }
+}
+void GLHelper::setParams(){
+  glLoadIdentity();
+  setRatio();
   glScalef( 1.0f/ratioX, 1.0f/ratioY, 1.0f ); // чтоб не возникали деформации при повороте текстур
   glEnable(GL_BLEND);
   //glBlendFunc (GL_SRC_ALPHA, GL_SRC_ALPHA);

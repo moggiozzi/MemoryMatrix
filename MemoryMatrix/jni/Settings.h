@@ -1,6 +1,7 @@
 #ifndef SETTINGS_H_
 #define SETTINGS_H_
 
+#include "ColorRGB.h"
 #include <string>
 
 enum DisplayOrientation { DO_HORIZONTAL, DO_VERTICAL };
@@ -29,6 +30,12 @@ public:
   ControlMode getControlMode();
   const std::string & getControlModeName();
   void nextControlMode();
+
+  static ColorRGB colorCellClosed; // закрытая
+  static ColorRGB colorCellEmpty;  // открытая верно
+  static ColorRGB colorCellError;  // открытая ошибочно
+  static ColorRGB colorBoard;      // доска
+  static ColorRGB colorBackground; // фон
 };
 
 extern Settings settings;

@@ -28,8 +28,12 @@ class GLHelper{
 
   static int width;
   static int height;
-  static Texture fontTexture;
+  static float ratioX;
+  static float ratioY;
 
+  static Texture fontTexture;
+  
+  static void setRatio();
 public:
   static GLfloat xToGl(int x);
   static GLfloat yToGl(int y);
@@ -51,8 +55,8 @@ public:
 
   static int getWidth(){return width;}
   static int getHeight(){return height;}
-  static void setWidth(int w){width=w;}
-  static void setHeight(int h){height=h;}
+  static void setWidth(int w);
+  static void setHeight(int h);
 
   static void clear(GLfloat r=0, GLfloat g=0, GLfloat b=0, GLfloat a=1);
   static void setColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a=1);

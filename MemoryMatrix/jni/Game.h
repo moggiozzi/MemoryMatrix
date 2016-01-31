@@ -30,7 +30,7 @@ public:
   void update(float dt);
   void save();
   void resume();
-
+  void reshape();
   void touch(int x, int y);
   bool keyDown(uint keyCode);
   void accel(float x, float y, float z);
