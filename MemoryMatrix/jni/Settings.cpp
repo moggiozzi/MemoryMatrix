@@ -1,11 +1,12 @@
 #include "Settings.h"
 
 // todo color settings
-ColorRGB Settings::colorCellClosed(0,0,0);
-ColorRGB Settings::colorCellEmpty(0,0,0); 
-ColorRGB Settings::colorCellError(0,0,0);
-ColorRGB Settings::colorBoard(0,0,0);
-ColorRGB Settings::colorBackground(0,0,0);
+ColorRGB Settings::colorCellClosed(0.4,0.4,8.0);
+ColorRGB Settings::colorCellEmpty(0.8,0.8,1.0);
+ColorRGB Settings::colorCellFull(0.6,0.6,1.0);
+ColorRGB Settings::colorCellError(0.6,0.4,0.4);
+ColorRGB Settings::colorBoard(0.2,0.2,0.2);
+ColorRGB Settings::colorBackground(0.0,0.0,0.0);
 
 Settings settings;
 

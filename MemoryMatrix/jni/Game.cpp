@@ -91,15 +91,16 @@ bool Game::keyDown(uint keyCode){
 }
 
 void Game::touch(int x, int y){
-  GameState gState = getGameState();
-  switch (gState){
-  case GS_INGAME:
-      world.touch(x,y);
-    break;
-  default:
-      menu.touch(x,y);
-    break;
-  }
+  world.touch(x,y);
+  //GameState gState = getGameState();
+  //switch (gState){
+  //case GS_INGAME:
+  //    world.touch(x,y);
+  //  break;
+  //default:
+  //    menu.touch(x,y);
+  //  break;
+  //}
 }
 
 void Game::accel(float x, float y, float z){

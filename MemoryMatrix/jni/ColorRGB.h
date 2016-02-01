@@ -1,4 +1,7 @@
 #pragma once
+#ifndef COLOR_RGB_H_
+#define COLOR_RGB_H_
+
 #include <stdint.h>
 
 class ColorRGB
@@ -10,3 +13,4 @@ public:
   uint8_t b;
 };
 
+#endif

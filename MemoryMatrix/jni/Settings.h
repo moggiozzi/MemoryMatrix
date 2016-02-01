@@ -32,10 +32,13 @@ public:
   void nextControlMode();
 
   static ColorRGB colorCellClosed; // закрытая
-  static ColorRGB colorCellEmpty;  // открытая верно
+  static ColorRGB colorCellEmpty;
+  static ColorRGB colorCellFull;
   static ColorRGB colorCellError;  // открытая ошибочно
   static ColorRGB colorBoard;      // доска
   static ColorRGB colorBackground; // фон
+  static const int MAX_ROWS = 8;
+  static const int MAX_COLS = 8;
 };
 
 extern Settings settings;

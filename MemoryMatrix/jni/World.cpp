@@ -2,6 +2,8 @@
 #include "ResourceManager.h"
 #include "AudioHelper.h"
 #include "GameState.h"
+#include "Cell.h"
+#include "Settings.h"
 #include <algorithm>
 
 namespace{
@@ -11,8 +13,9 @@ namespace{
   int boardSize;
   int cellSize;
   int rows, cols;
-  float x, y;
+  float boardX, boardY;
   enum State{ APPEAR, OPEN, SHOW, CLOSE, HIDDEN, OPEN_RESULT, SHOW_RESULT, LEAVE } state;
+  Cell cells[ Settings::MAX_ROWS * Settings::MAX_COLS ];
 }
 
 void World::reshape(){
@@ -27,12 +30,12 @@ bool World::init(){
   cols = 2;
   cellSize = std::min((GLHelper::getWidth()-borderSize)/cols, (GLHelper::getHeight()-borderSize)/rows) - borderSize;
   boardSize = (cellSize + borderSize) * cols;
-  x = GLHelper::xToGl(-boardSize); // board hidden to left
-  y = GLHelper::yToGl(( GLHelper::getHeight() - boardSize + borderSize ) / 2.0);
+  boardX = GLHelper::xToGl(-boardSize); // board hidden to left
+  boardY = GLHelper::yToGl(( GLHelper::getHeight() - boardSize + borderSize ) / 2.0);
   state = State::APPEAR;
-  //for(int i=0;i<rows;i++)
-  //  for(int j=0;j<cols;j++)
-  //    board[i][j]=
+  for(int i=0;i<rows;i++)
+    for(int j=0;j<cols;j++)
+      cells[i*cols+j].setVal( rand() % 2 );
   //ResourceManager::loadImage("res/character.png",&charTex);
   initLevel();
   return true;
@@ -44,15 +47,14 @@ void World::initLevel(){
 
 void World::draw(bool isActive){
   GLHelper::setColor(0.6f,0.6f,1.0f);
-  int devX = GLHelper::glToX(x);
-  int devY = GLHelper::glToY(y);
+  int devX = GLHelper::glToX(boardX);
+  int devY = GLHelper::glToY(boardY);
   for(int i=0;i<rows;i++)
     for(int j=0;j<cols;j++){
-      GLHelper::drawRect2d(
+      cells[i*cols+j].draw(
         devX + j*(cellSize+borderSize),
         devY + i*(cellSize+borderSize),
-        devX + j*(cellSize+borderSize) + cellSize,
-        devY + i*(cellSize+borderSize) + cellSize);
+        cellSize);
     }
   if(!isActive)
     return;
@@ -66,9 +68,9 @@ void World::update(float dt){
   switch(state){
     case APPEAR:{
       float targetX = GLHelper::xToGl(( GLHelper::getWidth() - boardSize ) / 2);
-      x += 2.0*dt;
-      if ( x > targetX ){
-        x = targetX;
+      boardX += 2.0*dt;
+      if ( boardX > targetX ){
+        boardX = targetX;
         state = OPEN;
       }
     }break;
@@ -106,10 +108,12 @@ bool World::keyDown(uint keyCode){
 }
 
 void World::touch(int x, int y){
-  if(x<GLHelper::getWidth()/2)
-    keyDown(KEY_LEFT);
-  else
-    keyDown(KEY_RIGHT);
+  int boardDevX = GLHelper::glToX(boardX);
+  int boardDevY = GLHelper::glToY(boardY);
+  int c = (x - boardDevX) / (cellSize + borderSize);
+  int r = (y - boardDevY) / (cellSize + borderSize);
+  if ( c >= 0 && c < cols && r >= 0 && r < rows )
+    cells[ r * cols + c ].setState( Cell::CellState::CS_OPENED );
 }
 
 void World::accel(float x, float y, float z){

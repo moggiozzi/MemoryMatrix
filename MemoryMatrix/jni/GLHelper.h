@@ -10,6 +10,9 @@
 #ifndef TEXTURE_H_
 #include "Texture.h"
 #endif
+#ifndef COLOR_RGB_H_
+#include "ColorRGB.h"
+#endif
 
 #ifdef __ANDROID__
 #define GL_GLEXT_PROTOTYPES
@@ -57,9 +60,12 @@ public:
   static int getHeight(){return height;}
   static void setWidth(int w);
   static void setHeight(int h);
+  static int getRatioX(){return ratioX;}
+  static int getRatioY(){return ratioY;}
 
   static void clear(GLfloat r=0, GLfloat g=0, GLfloat b=0, GLfloat a=1);
   static void setColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a=1);
+  static void setColor(ColorRGB &c);
   static void setLineWidth(GLuint w);
   static void drawCircle2d(GLint x, GLint y, GLint r, uint points_number=16);
   static void drawLine2d(GLint x1, GLint y1, GLint x2, GLint y2);
