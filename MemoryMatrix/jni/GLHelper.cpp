@@ -138,7 +138,7 @@ void GLHelper::setColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a){
   glColor4f(r,g,b,a);
 }
 void GLHelper::setColor(ColorRGB &c){
-  glColor3b( c.r, c.g, c.b );
+  glColor4f( c.r, c.g, c.b, 1.0 );
 }
 
 void GLHelper::setLineWidth(GLuint w){

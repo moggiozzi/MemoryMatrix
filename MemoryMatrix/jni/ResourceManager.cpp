@@ -136,10 +136,10 @@ int ResourceManager::loadImage(const char *path, Texture *tex, int format){
   bool success = ilLoadImage((const ILstring)path) != 0;
   if (success) {
     //success = ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
-    if (!success) {
-      LOGI("Error ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE)");
-      return false;
-    }
+    //if (!success) {
+    //  LOGI("Error ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE)");
+    //  return false;
+    //}
     tex->format = format;
     tex->size.setX( ilGetInteger(IL_IMAGE_WIDTH) );
     tex->size.setY( ilGetInteger(IL_IMAGE_HEIGHT) );

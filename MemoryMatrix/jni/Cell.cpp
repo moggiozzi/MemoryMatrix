@@ -40,7 +40,7 @@ void Cell::draw( int x, int y, int size ){
     case CS_OPENING: //todo
     case CS_OPENED:
       if (value == EMPTY)
-        GLHelper::setColor(settings.colorCellEmpty);
+        GLHelper::setColor(settings.colorCellError);
       else
         GLHelper::setColor(settings.colorCellFull);
       GLHelper::drawRect2d( x, y, x+size, y+size);
