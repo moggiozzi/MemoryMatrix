@@ -28,10 +28,10 @@ void World::reshape(){
 bool World::init(){
   rows = 2;
   cols = 2;
-  cellSize = std::min((GLHelper::getWidth()-borderSize)/cols, (GLHelper::getHeight()-borderSize)/rows) - borderSize;
-  boardSize = (cellSize + borderSize) * cols;
+  cellSize = std::min((GLHelper::getWidth()-2*borderSize)/cols, (GLHelper::getHeight()-2*borderSize)/rows);
+  boardSize = cellSize * cols;
   boardX = GLHelper::xToGl(-boardSize); // board hidden to left
-  boardY = GLHelper::yToGl(( GLHelper::getHeight() - boardSize + borderSize ) / 2.0);
+  boardY = GLHelper::yToGl(0.0);
   state = State::APPEAR;
   for(int i=0;i<rows;i++)
     for(int j=0;j<cols;j++)
@@ -52,9 +52,9 @@ void World::draw(bool isActive){
   for(int i=0;i<rows;i++)
     for(int j=0;j<cols;j++){
       cells[i*cols+j].draw(
-        devX + j*(cellSize+borderSize),
-        devY + i*(cellSize+borderSize),
-        cellSize);
+        devX + borderSize + j*cellSize + borderSize,
+        devY + borderSize + i*cellSize + borderSize,
+        cellSize - 2*borderSize);
     }
   if(!isActive)
     return;
@@ -110,8 +110,8 @@ bool World::keyDown(uint keyCode){
 void World::touch(int x, int y){
   int boardDevX = GLHelper::glToX(boardX);
   int boardDevY = GLHelper::glToY(boardY);
-  int c = (x - boardDevX) / (cellSize + borderSize);
-  int r = (y - boardDevY) / (cellSize + borderSize);
+  int c = (x - boardDevX - borderSize) / cellSize;
+  int r = (y - boardDevY - borderSize) / cellSize;
   if ( c >= 0 && c < cols && r >= 0 && r < rows )
     cells[ r * cols + c ].setState( Cell::CellState::CS_OPENED );
 }
