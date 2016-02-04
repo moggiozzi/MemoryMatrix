@@ -19,10 +19,10 @@ namespace{
 }
 
 void World::reshape(){
-  //cellSize = std::min((GLHelper::getWidth()-borderSize)/cols, (GLHelper::getHeight()-borderSize)/rows) - borderSize;
-  //boardSize = (cellSize + borderSize) * cols;
-  //x = GLHelper::xToGl(( GLHelper::getWidth() - boardSize ) / 2);
-  //y = GLHelper::yToGl(( GLHelper::getHeight() - boardSize + borderSize ) / 2.0);
+  cellSize = std::min((GLHelper::getWidth()-2*borderSize)/cols, (GLHelper::getHeight()-2*borderSize)/rows);
+  boardSize = cellSize * cols + 2*borderSize;
+  boardX = GLHelper::xToGl(( GLHelper::getWidth() - boardSize ) / 2);
+  boardY = GLHelper::yToGl(0.0);
 }
 
 bool World::init(){

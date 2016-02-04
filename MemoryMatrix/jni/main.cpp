@@ -4,13 +4,13 @@
 //#include <android/native_app_glue/android_native_app_glue.h> // for android_app
 // !!! only in codding !!!
 
-#include <time.h>
 #include "Game.h"
 #include "ResourceManager.h"
 #include "GLHelper.h"
 #include "AudioHelper.h"
 #include "Settings.h"
 #include <stdlib.h>
+#include <time.h>
 
 clock_t lastTime=0, currentTime=0;
 
@@ -230,17 +230,12 @@ void Idle(void)
 
 void handleReshape(int x, int y)
 {
-  //todo
-  //GLHelper::setWidth(x);
-  //GLHelper::setHeight(y);
-  //game.reshape();
+  glViewport(0,0,x,y);
 
-  //int nWidth = glutGet(GLUT_WINDOW_WIDTH);
-  //int nHeight = glutGet(GLUT_WINDOW_HEIGHT);
-  //glViewport(0,0,nWidth,nHeight);
-  //glMatrixMode(GL_PROJECTION);
-  //glLoadIdentity();
-  //gluOrtho2D(0,nWidth,0,nHeight);
+  GLHelper::setWidth(x);
+  GLHelper::setHeight(y);
+  GLHelper::setParams();
+  game.reshape();
 }
 
 void draw(void)
