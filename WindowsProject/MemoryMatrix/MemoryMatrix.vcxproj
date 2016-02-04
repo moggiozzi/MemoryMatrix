@@ -77,6 +77,10 @@
     <IncludePath>$(SolutionDir)\..\DevIL-SDK-x86-1.7.8\include;$(SolutionDir)\..\freeglut-2.8.0\include;$(SolutionDir)\..\OpenAL\include;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);</IncludePath>
     <LibraryPath>$(SolutionDir)\..\DevIL-SDK-x86-1.7.8\lib;$(SolutionDir)\..\freeglut-2.8.0\lib\Debug;$(SolutionDir)\..\OpenAL\lib;$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSDK_LibraryPath_x86);</LibraryPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(SolutionDir)\..\DevIL-SDK-x86-1.7.8\include;$(SolutionDir)\..\freeglut-2.8.0\include;$(SolutionDir)\..\OpenAL\include;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>$(SolutionDir)\..\DevIL-SDK-x86-1.7.8\lib;$(SolutionDir)\..\freeglut-2.8.0\lib\Debug;$(SolutionDir)\..\OpenAL\lib;$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSDK_LibraryPath_x86);</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
