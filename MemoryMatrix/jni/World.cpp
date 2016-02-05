@@ -18,8 +18,13 @@ namespace{
   Cell cells[ Settings::MAX_ROWS * Settings::MAX_COLS ];
 }
 
-void World::reshape(){
+void calcSizes(){
+  cellCount = rows * cols;
   cellSize = std::min((GLHelper::getWidth()-2*borderSize)/cols, (GLHelper::getHeight()-2*borderSize)/rows);
+  boardSize = cellSize * cols;
+  boardY = GLHelper::yToGl(0);
+  cellSize = std::min((GLHelper::getWidth()-2*borderSize)/cols, (GLHelper::getHeight()-2*borderSize)/rows);
+  borderSize = cellSize / 10 + 1;
   boardSize = cellSize * cols + 2*borderSize;
   switch(state){
     case WS_OPEN:
@@ -32,17 +37,13 @@ void World::reshape(){
     break;
     case WS_APPEAR:
     case WS_LEAVE:
+      boardX = GLHelper::xToGl(-boardSize); // board hidden to left
       break;
   }
-  boardY = GLHelper::yToGl(0);
 }
 
-void calcSizes(){
-  cellCount = rows * cols;
-  cellSize = std::min((GLHelper::getWidth()-2*borderSize)/cols, (GLHelper::getHeight()-2*borderSize)/rows);
-  boardSize = cellSize * cols;
-  boardX = GLHelper::xToGl(-boardSize); // board hidden to left
-  boardY = GLHelper::yToGl(0);
+void World::reshape(){
+  calcSizes();
 }
 
 bool World::init(){

@@ -42,7 +42,9 @@ void Cell::draw( int x, int y, int size ){
   switch(state){
     case CS_CLOSING:{
       if (animPart < 0.5)
-        GLHelper::setColor(value == CV_EMPTY ? settings.colorCellEmpty : settings.colorCellFull);
+        GLHelper::setColor(value == CV_EMPTY ? 
+          (byUser ? settings.colorCellError : settings.colorCellEmpty)
+          : settings.colorCellFull);
       else
         GLHelper::setColor(settings.colorCellClosed);
       float k = (animPart <= 0.5) ? 1 - 2*animPart : 2*animPart-1;
@@ -52,7 +54,9 @@ void Cell::draw( int x, int y, int size ){
       if (animPart < 0.5)
         GLHelper::setColor(settings.colorCellClosed);
       else
-        GLHelper::setColor(value == CV_EMPTY ? settings.colorCellEmpty : settings.colorCellFull);
+        GLHelper::setColor(value == CV_EMPTY ?
+          (byUser ? settings.colorCellError : settings.colorCellEmpty)
+          : settings.colorCellFull);
       float k = (animPart <= 0.5) ? 1 - 2*animPart : 2*animPart-1;
       GLHelper::drawRect2d( x + (size - size*k)/2, y, size*k, size);
     }break;
@@ -61,7 +65,9 @@ void Cell::draw( int x, int y, int size ){
       GLHelper::drawRect2d( x, y, size, size);
     break;
     case CS_OPENED:
-      GLHelper::setColor(value == CV_EMPTY ? settings.colorCellEmpty : settings.colorCellFull);
+      GLHelper::setColor(value == CV_EMPTY ?
+        (byUser ? settings.colorCellError : settings.colorCellEmpty)
+        : settings.colorCellFull);
       GLHelper::drawRect2d( x , y, size, size);
     break;
   }
