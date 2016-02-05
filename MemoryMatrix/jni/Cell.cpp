@@ -10,7 +10,12 @@ Cell::Cell(int val) : animPart(0.0), state(CS_CLOSED){
 void Cell::setVal(int val){
   (val==0) ? value = CV_EMPTY : value = CV_SELECTED;
 }
-
+void Cell::setState(CellState s) {
+  if ( state != s ){
+    animPart = 0;
+    state = s;
+  }
+}
 void Cell::update(float dt){
   switch(state){
     case CS_CLOSED:
@@ -34,7 +39,14 @@ void Cell::update(float dt){
 void Cell::draw( int x, int y, int size ){
   int w = size;
   switch(state){
-    case CS_CLOSING: //todo
+    case CS_CLOSING:{
+      if (animPart < 0.5)
+        GLHelper::setColor(value == CV_EMPTY ? settings.colorCellEmpty : settings.colorCellFull);
+      else
+        GLHelper::setColor(settings.colorCellClosed);
+      float k = (animPart <= 0.5) ? 1 - 2*animPart : 2*animPart-1;
+      GLHelper::drawRect2d( x + (size - size*k)/2, y, size*k, size);
+    }break;
     case CS_CLOSED:
       GLHelper::setColor(settings.colorCellClosed);
       GLHelper::drawRect2d( x, y, size, size);

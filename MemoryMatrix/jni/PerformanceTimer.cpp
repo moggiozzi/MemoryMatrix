@@ -1,9 +1,27 @@
 #include "PerformanceTimer.h"
+#include <limits.h>
 
 #ifdef _WIN32
 bool PerformanceTimer::isInitizalied = false;
 LARGE_INTEGER PerformanceTimer::ticksPerSec;
 #endif
+
+/**
+* Возвращает разницу между двумя uint64_t числами с учетом переполнения
+* \param [in] first  первая метка времени
+* \param [in] second вторая метка времени
+* \return возвращает результат операции second - first
+*/
+static inline 
+uint64_t Uint64OverflowDiff( const uint64_t& first, const uint64_t& second )
+{
+  uint64_t res = 0;
+  if (second >= first)
+    res = second - first;
+  else
+    res = ULLONG_MAX - second + first;
+  return res;
+}
 
 #ifdef __linux__
 /// Вычисляет разницу между двумя timespec
@@ -26,7 +44,7 @@ timespec timespec_diff( const timespec& start, const timespec& end )
 
 PerformanceTimer::PerformanceTimer()
 {
-  #if defined(WINDOWS)
+  #if defined(_WIN32)
   if ( !isInitizalied )
   {
     isInitizalied = true;
@@ -53,7 +71,7 @@ PerformanceTimer::~PerformanceTimer()
 
 void PerformanceTimer::Start()
 {
-  #if defined(WINDOWS)
+  #if defined(_WIN32)
   BOOL res = QueryPerformanceCounter(&ticks1_);
   #ifdef DEBUG
   if (res == FALSE)
@@ -72,7 +90,7 @@ void PerformanceTimer::Start()
 
 void PerformanceTimer::Stop()
 {
-  #if defined(WINDOWS)
+  #if defined(_WIN32)
   BOOL res = QueryPerformanceCounter(&ticks2_);
   #ifdef DEBUG
   if (res == FALSE)
@@ -96,7 +114,7 @@ void PerformanceTimer::Restart()
 
 double PerformanceTimer::CntSeconds() const
 {
-  #if defined(WINDOWS)
+  #if defined(_WIN32)
   LARGE_INTEGER diff;
   diff.QuadPart = Uint64OverflowDiff( ticks1_.QuadPart, ticks2_.QuadPart );  
   double seconds = (double) diff.QuadPart / ticksPerSec.QuadPart;
@@ -114,7 +132,7 @@ double PerformanceTimer::CntSeconds() const
 
 double PerformanceTimer::CntMilliseconds() const
 {
-  #if defined(WINDOWS)
+  #if defined(_WIN32)
   LARGE_INTEGER diff;
   diff.QuadPart = Uint64OverflowDiff( ticks1_.QuadPart, ticks2_.QuadPart );  
   double milliSeconds = (double) diff.QuadPart * 1000 / ticksPerSec.QuadPart;
@@ -131,7 +149,7 @@ double PerformanceTimer::CntMilliseconds() const
 
 double PerformanceTimer::CntMicroseconds() const
 {
-  #if defined(WINDOWS)
+  #if defined(_WIN32)
   LARGE_INTEGER diff;
   diff.QuadPart = Uint64OverflowDiff( ticks1_.QuadPart, ticks2_.QuadPart );  
   double microSeconds = (double) diff.QuadPart * 1000000 / ticksPerSec.QuadPart;
@@ -148,10 +166,10 @@ double PerformanceTimer::CntMicroseconds() const
 
 uint32_t PerformanceTimer::CntMicrosecondsUint() const
 {
-  #if defined(WINDOWS)
+  #if defined(_WIN32)
   LARGE_INTEGER diff;
   diff.QuadPart = Uint64OverflowDiff( ticks1_.QuadPart, ticks2_.QuadPart );  
-  uint microSeconds =  (uint) ( (double)diff.QuadPart * 1000000 / ticksPerSec.QuadPart );
+  uint32_t microSeconds =  (uint32_t) ( (double)diff.QuadPart * 1000000 / ticksPerSec.QuadPart );
   return microSeconds;
   
   #elif defined(__linux__)
@@ -165,7 +183,7 @@ uint32_t PerformanceTimer::CntMicrosecondsUint() const
 
 uint64_t PerformanceTimer::CntTicks() const
 {
-  #if defined(WINDOWS)
+  #if defined(_WIN32)
   LARGE_INTEGER diff;
   diff.QuadPart = Uint64OverflowDiff( ticks1_.QuadPart, ticks2_.QuadPart );  
   return diff.QuadPart;
@@ -179,7 +197,7 @@ uint64_t PerformanceTimer::CntTicks() const
 
 bool PerformanceTimer::IsElapsed_Ms( uint32_t milliseconds ) const
 {
-  #if defined(WINDOWS)
+  #if defined(_WIN32)
   LARGE_INTEGER ticks3;
   BOOL res = QueryPerformanceCounter( &ticks3 );
   #ifdef DEBUG
@@ -188,7 +206,7 @@ bool PerformanceTimer::IsElapsed_Ms( uint32_t milliseconds ) const
   #endif
   LARGE_INTEGER diff;
   diff.QuadPart = Uint64OverflowDiff( ticks1_.QuadPart, ticks3.QuadPart );  
-  uint elapsedMs =  (uint) ( (double)diff.QuadPart * 1000 / ticksPerSec.QuadPart );
+  uint32_t elapsedMs =  (uint32_t) ( (double)diff.QuadPart * 1000 / ticksPerSec.QuadPart );
   if ( elapsedMs >= milliseconds )  
     return true;
   return false;

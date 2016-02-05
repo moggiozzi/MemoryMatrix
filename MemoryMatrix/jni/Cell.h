@@ -23,7 +23,7 @@ public:
   CellValue getVal() const { return value; }
   void setVal(int val);
   CellState getState() const { return state; }
-  void setState(CellState s) { state = s; }
+  void setState(CellState s);
 };
 
 #endif

@@ -4,6 +4,7 @@
 #include "GameState.h"
 #include "Cell.h"
 #include "Settings.h"
+#include "PerformanceTimer.h"
 #include <algorithm>
 
 namespace{
@@ -13,7 +14,7 @@ namespace{
   int cellSize;
   int rows, cols, cellCount;
   float boardX, boardY;
-  enum State{ APPEAR, OPEN, SHOW, CLOSE, HIDDEN, OPEN_RESULT, SHOW_RESULT, LEAVE } state;
+  enum WorldState{ WS_APPEAR, WS_OPEN, WS_SHOW, WS_CLOSE, WS_HIDDEN, WS_OPEN_RESULT, WS_SHOW_RESULT, WS_LEAVE } state;
   Cell cells[ Settings::MAX_ROWS * Settings::MAX_COLS ];
 }
 
@@ -21,13 +22,13 @@ void World::reshape(){
   cellSize = std::min((GLHelper::getWidth()-2*borderSize)/cols, (GLHelper::getHeight()-2*borderSize)/rows);
   boardSize = cellSize * cols + 2*borderSize;
   switch(state){
-    case OPEN:
-    case SHOW:
-    case CLOSE:
-    case HIDDEN:
-    case OPEN_RESULT:
-    case SHOW_RESULT:
-    case LEAVE:
+    case WS_OPEN:
+    case WS_SHOW:
+    case WS_CLOSE:
+    case WS_HIDDEN:
+    case WS_OPEN_RESULT:
+    case WS_SHOW_RESULT:
+    case WS_LEAVE:
       boardX = GLHelper::xToGl(( GLHelper::getWidth() - boardSize ) / 2);
       break;
   }
@@ -42,7 +43,7 @@ bool World::init(){
   boardSize = cellSize * cols;
   boardX = GLHelper::xToGl(-boardSize); // board hidden to left
   boardY = GLHelper::yToGl(0);
-  state = State::APPEAR;
+  state = WorldState::WS_APPEAR;
   //ResourceManager::loadImage("res/character.png",&charTex);
   initLevel();
   return true;
@@ -81,34 +82,49 @@ void World::draw(bool isActive){
 }
 
 void World::update(float dt){
+  static PerformanceTimer pt;
   switch(state){
-    case APPEAR:{
+    case WS_APPEAR:{
       float targetX = GLHelper::xToGl(( GLHelper::getWidth() - boardSize ) / 2);
       boardX += 2*dt;
       if ( boardX > targetX ){
         boardX = targetX;
         for(int i=0; i<cellCount;i++)
           cells[i].setState(Cell::CS_OPENING);
-        state = OPEN;
+        state = WS_OPEN;
       }
     }break;
-    case OPEN:
+    case WS_OPEN:
       for(int i=0; i<cellCount;i++)
         cells[i].update(dt);
-      if (cells[0].getState() == Cell::CS_OPENED )
-        state = SHOW;
+      if (cells[0].getState() == Cell::CS_OPENED ){
+        state = WS_SHOW;
+        pt.Start();
+      }
       break;
-    case SHOW:
+    case WS_SHOW:
+      pt.Stop();
+      if(pt.CntSeconds()>2){
+        for(int i=0; i<cellCount;i++)
+          cells[i].setState(Cell::CS_CLOSING);
+        state = WS_CLOSE;
+      }
       break;
-    case CLOSE:
+    case WS_CLOSE:
+      for(int i=0; i<cellCount;i++)
+        cells[i].update(dt);
+      if (cells[0].getState() == Cell::CS_CLOSED ){
+        state = WS_HIDDEN;
+        pt.Start();
+      }
       break;
-    case HIDDEN:
+    case WS_HIDDEN:
       break;
-    case OPEN_RESULT:
+    case WS_OPEN_RESULT:
       break;
-    case SHOW_RESULT:
+    case WS_SHOW_RESULT:
       break;
-    case LEAVE:
+    case WS_LEAVE:
       break;
   }
 }
