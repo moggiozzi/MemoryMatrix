@@ -15,8 +15,8 @@ float GLHelper::ratioX=1;
 float GLHelper::ratioY=1;
 GLfloat GLHelper::xToGl(int x) { return ( (float)x/width-0.5f)*2.0f*ratioX; }
 GLfloat GLHelper::yToGl(int y) { return ( ((float)height-y)/height-0.5f)*2.0f*ratioY; }
-int GLHelper::glToX(GLfloat x) { return (x/ratioX + 1.0) * width / 2.0; }
-int GLHelper::glToY(GLfloat y) { return (1.0 - y/ratioY) * height / 2.0; }
+int GLHelper::glToX(GLfloat x) { return (int)((x/ratioX + 1.0) * width / 2.0); }
+int GLHelper::glToY(GLfloat y) { return (int)((1.0 - y/ratioY) * height / 2.0); }
 
 void GLHelper::setWidth(int w){width=w;setRatio();}
 void GLHelper::setHeight(int h){height=h;setRatio();}
@@ -165,8 +165,8 @@ void GLHelper::drawCircle2d(GLint x, GLint y, GLint r, uint points_number){
   float angle;
   for(unsigned int i=0; i<points_number+1; i++){	//+1 замыкающая точка
     angle = static_cast<GLfloat>(2*M_PI*i/points_number);
-    points_[i*2+2] = xToGl(x + r*cos(angle));
-    points_[i*2+3] = yToGl(y + r*sin(angle));
+    points_[i*2+2] = xToGl((int)(x + r*cos(angle)));
+    points_[i*2+3] = yToGl((int)(y + r*sin(angle)));
   }
   glVertexPointer( 2, GL_FLOAT, 0, points_ ); //2 координаты на точку
   glDrawArrays( GL_TRIANGLE_FAN, 0, points_number+2 );
@@ -187,8 +187,8 @@ void GLHelper::drawCircleSector2d(GLint x, GLint y, GLint r, GLfloat a1, GLfloat
   else
     angleStep = static_cast<GLfloat>((2*M_PI+a2-a1)/points_number);
   for(uint i=0; i<points_number+1; i++){
-    points_[i*2+2] = xToGl(x + r*cos(angle));
-    points_[i*2+3] = yToGl(y + r*sin(angle));
+    points_[i*2+2] = xToGl((int)(x + r*cos(angle)));
+    points_[i*2+3] = yToGl((int)(y + r*sin(angle)));
     angle += angleStep;
   }
   glVertexPointer( 2, GL_FLOAT, 0, points_ ); //2 координаты на точку

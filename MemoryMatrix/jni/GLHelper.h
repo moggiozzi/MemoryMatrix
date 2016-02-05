@@ -60,8 +60,8 @@ public:
   static int getHeight(){return height;}
   static void setWidth(int w);
   static void setHeight(int h);
-  static int getRatioX(){return ratioX;}
-  static int getRatioY(){return ratioY;}
+  static float getRatioX(){return ratioX;}
+  static float getRatioY(){return ratioY;}
 
   static void clear(GLfloat r=0, GLfloat g=0, GLfloat b=0, GLfloat a=1);
   static void setColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a=1);

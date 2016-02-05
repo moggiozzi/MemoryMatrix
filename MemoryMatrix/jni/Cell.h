@@ -20,6 +20,7 @@ public:
   void update(float dt);
   void draw( int x, int y, int size );
 
+  CellValue getVal()const{return value;}
   void setVal(int val);
   void setState(CellState s) { state = s; }
 };

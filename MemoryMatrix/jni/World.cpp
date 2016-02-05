@@ -9,7 +9,6 @@
 namespace{
   //Texture charTex;
   int borderSize = 10;
-  float dx;
   int boardSize;
   int cellSize;
   int rows, cols;
@@ -22,7 +21,7 @@ void World::reshape(){
   cellSize = std::min((GLHelper::getWidth()-2*borderSize)/cols, (GLHelper::getHeight()-2*borderSize)/rows);
   boardSize = cellSize * cols + 2*borderSize;
   boardX = GLHelper::xToGl(( GLHelper::getWidth() - boardSize ) / 2);
-  boardY = GLHelper::yToGl(0.0);
+  boardY = GLHelper::yToGl(0);
 }
 
 bool World::init(){
@@ -31,18 +30,26 @@ bool World::init(){
   cellSize = std::min((GLHelper::getWidth()-2*borderSize)/cols, (GLHelper::getHeight()-2*borderSize)/rows);
   boardSize = cellSize * cols;
   boardX = GLHelper::xToGl(-boardSize); // board hidden to left
-  boardY = GLHelper::yToGl(0.0);
+  boardY = GLHelper::yToGl(0);
   state = State::APPEAR;
-  for(int i=0;i<rows;i++)
-    for(int j=0;j<cols;j++)
-      cells[i*cols+j].setVal( rand() % 2 );
   //ResourceManager::loadImage("res/character.png",&charTex);
   initLevel();
   return true;
 }
 
 void World::initLevel(){
-  //score = 0;
+  int cnt = rows * cols / 2;
+  for(int i=0;i<rows;i++)
+    for(int j=0;j<cols;j++)
+      cells[i*cols+j].setVal( 0 );
+  while(cnt>0){
+    int i = rand()%rows;
+    int j = rand()%cols;
+    if(cells[i*cols+j].getVal()==0){
+      cells[i*cols+j].setVal(1);
+      cnt--;
+    }
+  }
 }
 
 void World::draw(bool isActive){
@@ -68,7 +75,7 @@ void World::update(float dt){
   switch(state){
     case APPEAR:{
       float targetX = GLHelper::xToGl(( GLHelper::getWidth() - boardSize ) / 2);
-      boardX += 2.0*dt;
+      boardX += 2*dt;
       if ( boardX > targetX ){
         boardX = targetX;
         state = OPEN;
