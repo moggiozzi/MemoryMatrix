@@ -24,7 +24,7 @@ void calcSizes(){
   boardSize = cellSize * cols;
   boardY = GLHelper::yToGl(0);
   cellSize = std::min((GLHelper::getWidth()-2*borderSize)/cols, (GLHelper::getHeight()-2*borderSize)/rows);
-  borderSize = cellSize / 10 + 1;
+  borderSize = cellSize / 20 + 1;
   boardSize = cellSize * cols + 2*borderSize;
   switch(state){
     case WS_OPEN:
@@ -163,7 +163,7 @@ void World::update(float dt){
     //  break;
     case WS_LEAVE:
       pt.Stop();
-      if ( pt.CntSeconds() > 0 )
+      if ( pt.CntSeconds() > 1 )
       {
         boardX += 2*dt;
         if ( GLHelper::glToX( boardX ) > GLHelper::getWidth() )
