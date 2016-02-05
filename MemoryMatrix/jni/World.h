@@ -17,9 +17,9 @@ public:
   void update(float dt);
   // Изменение размера окна
   void reshape();
-  bool keyDown(uint keyCode);
+  //bool keyDown(uint keyCode);
   void touch(int x, int y);
-  void accel(float x, float y, float z);
+  //void accel(float x, float y, float z);
   
   uint getSaveDataSize();
   void saveTo(char *data);

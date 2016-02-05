@@ -219,7 +219,7 @@ void handleInput( unsigned char keyCode, int mouseX, int mouseY )
   game.keyDown( keyCode );
   if (keyCode=='f')
     glutFullScreenToggle();
-  if (keyCode==27)//ESC
+  if (keyCode==KEY_ESC)
     exit(0);
 }
 
@@ -237,7 +237,6 @@ void handleReshape(int x, int y)
   {
     glViewport( 0, -4, x, y-4 );
   }
-
   GLHelper::setWidth(x);
   GLHelper::setHeight(y);
   GLHelper::setParams();

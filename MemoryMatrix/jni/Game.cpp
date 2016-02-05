@@ -30,7 +30,6 @@ void Game::drawFps(){
 
 void Game::draw(){
   GLHelper::clear(0, 0, 0);
-
   GameState gState = getGameState();
   switch (gState)
   {
@@ -79,14 +78,9 @@ void Game::update(float dt){
 }
 void Game::reshape(){ world.reshape(); }
 bool Game::keyDown(uint keyCode){
-  GameState gState = getGameState();
-  switch (gState){
-  case GS_INGAME:
-    return world.keyDown(keyCode);
-  break;
-  default:
-    return menu.keyDown(keyCode);
-  break;
+  if (keyCode == KEY_ESC){
+    setGameState(GS_PAUSE);
+    return true;
   }
 }
 
@@ -104,7 +98,6 @@ void Game::touch(int x, int y){
 }
 
 void Game::accel(float x, float y, float z){
-  world.accel(x,y,z);
 }
 
 uint Game::getSaveDataSize(){

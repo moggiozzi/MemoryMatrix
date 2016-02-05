@@ -28,21 +28,27 @@ void World::reshape(){
     case WS_HIDDEN:
     case WS_OPEN_RESULT:
     case WS_SHOW_RESULT:
-    case WS_LEAVE:
       boardX = GLHelper::xToGl(( GLHelper::getWidth() - boardSize ) / 2);
+    break;
+    case WS_APPEAR:
+    case WS_LEAVE:
       break;
   }
+  boardY = GLHelper::yToGl(0);
+}
+
+void calcSizes(){
+  cellCount = rows * cols;
+  cellSize = std::min((GLHelper::getWidth()-2*borderSize)/cols, (GLHelper::getHeight()-2*borderSize)/rows);
+  boardSize = cellSize * cols;
+  boardX = GLHelper::xToGl(-boardSize); // board hidden to left
   boardY = GLHelper::yToGl(0);
 }
 
 bool World::init(){
   rows = 2;
   cols = 2;
-  cellCount = rows * cols;
-  cellSize = std::min((GLHelper::getWidth()-2*borderSize)/cols, (GLHelper::getHeight()-2*borderSize)/rows);
-  boardSize = cellSize * cols;
-  boardX = GLHelper::xToGl(-boardSize); // board hidden to left
-  boardY = GLHelper::yToGl(0);
+  calcSizes();
   state = WorldState::WS_APPEAR;
   //ResourceManager::loadImage("res/character.png",&charTex);
   initLevel();
@@ -50,9 +56,13 @@ bool World::init(){
 }
 
 void World::initLevel(){
+  calcSizes();
+  for(int i=0; i<cellCount;i++){
+    cells[i].setVal( 0 );
+    cells[i].setState( Cell::CS_CLOSED );
+  }
+
   int cnt = cellCount / 2;
-  for(int i=0; i<cellCount;i++)
-      cells[i].setVal( 0 );
   while(cnt>0){
     int i = rand()%cellCount;
     if(cells[i].getVal()==0){
@@ -92,9 +102,12 @@ void World::update(float dt){
         for(int i=0; i<cellCount;i++)
           cells[i].setState(Cell::CS_OPENING);
         state = WS_OPEN;
+        pt.Start();
       }
     }break;
     case WS_OPEN:
+      pt.Stop();
+      if ( pt.CntSeconds() < 1 ) break;
       for(int i=0; i<cellCount;i++)
         cells[i].update(dt);
       if (cells[0].getState() == Cell::CS_OPENED ){
@@ -118,43 +131,71 @@ void World::update(float dt){
         pt.Start();
       }
       break;
-    case WS_HIDDEN:
-      break;
-    case WS_OPEN_RESULT:
-      break;
-    case WS_SHOW_RESULT:
-      break;
+    case WS_HIDDEN:{
+      int openedCellCount = 0;
+      for(int i=0; i<cellCount;i++){
+        cells[i].update(dt);
+        if ( cells[i].getState()==Cell::CS_OPENED )
+          openedCellCount++;
+      }
+      if ( openedCellCount == cellCount / 2 ){
+        for(int i=0; i<cellCount;i++){
+          if ( cells[i].getState()==Cell::CS_CLOSED )
+            cells[i].setState( Cell::CS_OPENING );
+        }
+        state = WS_OPEN_RESULT;
+      }
+    }break;
+    case WS_OPEN_RESULT: {
+      bool isAllOpened = true;
+      for(int i=0; i<cellCount;i++){
+        cells[i].update(dt);
+        if( cells[i].getState() != Cell::CS_OPENED )
+          isAllOpened = false;
+      }
+      if ( isAllOpened ){
+        pt.Start();
+        state = WS_LEAVE;
+      }
+    } break;
+    //case WS_SHOW_RESULT:
+    //  break;
     case WS_LEAVE:
-      break;
-  }
-}
-
-bool World::keyDown(uint keyCode){
-  if (keyCode == KEY_ESC){
-    setGameState(GS_PAUSE);
-    return true;
-  }
-  switch(keyCode){
-  case KEY_LEFT:
-    return true;
+      pt.Stop();
+      if ( pt.CntSeconds() > 0 )
+      {
+        boardX += 2*dt;
+        if ( GLHelper::glToX( boardX ) > GLHelper::getWidth() )
+        {
+          if ( rows >= cols )
+            cols++;
+          else
+            rows++;
+          initLevel();
+          boardX = GLHelper::xToGl(-boardSize); // board hidden to left
+          state = WS_APPEAR;
+        }
+      }
     break;
-  case KEY_RIGHT:
-    return true;
-    break;
   }
-  return false;
 }
 
 void World::touch(int x, int y){
-  int boardDevX = GLHelper::glToX(boardX);
-  int boardDevY = GLHelper::glToY(boardY);
-  int c = (x - boardDevX - borderSize) / cellSize;
-  int r = (y - boardDevY - borderSize) / cellSize;
-  if ( c >= 0 && c < cols && r >= 0 && r < rows )
-    cells[ r * cols + c ].setState( Cell::CellState::CS_OPENED );
-}
-
-void World::accel(float x, float y, float z){
+  LOGI("x:%d y:%d",x,y);
+  switch(state){
+    case WS_HIDDEN:{
+      int boardDevX = GLHelper::glToX(boardX);
+      int boardDevY = GLHelper::glToY(boardY);
+      int c = (x - boardDevX - borderSize) / cellSize;
+      int r = (y - boardDevY - borderSize) / cellSize;
+      if ( x > boardDevX && y > boardDevY && c >= 0 && c < cols && r >= 0 && r < rows )
+      {
+        if ( cells[ r * cols + c ].getState() == Cell::CS_CLOSED ){
+          cells[ r * cols + c ].setState( Cell::CellState::CS_OPENING, true );
+        }
+      }
+    }break;
+  }
 }
 
 uint World::getSaveDataSize(){

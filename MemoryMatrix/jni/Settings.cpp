@@ -1,9 +1,9 @@
 #include "Settings.h"
 
 // todo color settings
-ColorRGB Settings::colorCellClosed(0.4f,0.4f,8.0f);
+ColorRGB Settings::colorCellClosed(0.4f,0.4f,0.8f);
 ColorRGB Settings::colorCellEmpty(0.6f,0.6f,1.0f);
-ColorRGB Settings::colorCellFull(0.2f,1.0f,0.2f);
+ColorRGB Settings::colorCellFull(0.2f,0.8f,0.2f);
 ColorRGB Settings::colorCellError(1.0f,0.0f,0.0f);
 ColorRGB Settings::colorBoard(0.2f,0.2f,0.2f);
 ColorRGB Settings::colorBackground(0.0f,0.0f,0.0f);
