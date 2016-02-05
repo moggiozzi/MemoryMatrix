@@ -11,7 +11,7 @@ namespace{
   int borderSize = 10;
   int boardSize;
   int cellSize;
-  int rows, cols;
+  int rows, cols, cellCount;
   float boardX, boardY;
   enum State{ APPEAR, OPEN, SHOW, CLOSE, HIDDEN, OPEN_RESULT, SHOW_RESULT, LEAVE } state;
   Cell cells[ Settings::MAX_ROWS * Settings::MAX_COLS ];
@@ -20,13 +20,24 @@ namespace{
 void World::reshape(){
   cellSize = std::min((GLHelper::getWidth()-2*borderSize)/cols, (GLHelper::getHeight()-2*borderSize)/rows);
   boardSize = cellSize * cols + 2*borderSize;
-  boardX = GLHelper::xToGl(( GLHelper::getWidth() - boardSize ) / 2);
+  switch(state){
+    case OPEN:
+    case SHOW:
+    case CLOSE:
+    case HIDDEN:
+    case OPEN_RESULT:
+    case SHOW_RESULT:
+    case LEAVE:
+      boardX = GLHelper::xToGl(( GLHelper::getWidth() - boardSize ) / 2);
+      break;
+  }
   boardY = GLHelper::yToGl(0);
 }
 
 bool World::init(){
   rows = 2;
   cols = 2;
+  cellCount = rows * cols;
   cellSize = std::min((GLHelper::getWidth()-2*borderSize)/cols, (GLHelper::getHeight()-2*borderSize)/rows);
   boardSize = cellSize * cols;
   boardX = GLHelper::xToGl(-boardSize); // board hidden to left
@@ -38,15 +49,13 @@ bool World::init(){
 }
 
 void World::initLevel(){
-  int cnt = rows * cols / 2;
-  for(int i=0;i<rows;i++)
-    for(int j=0;j<cols;j++)
-      cells[i*cols+j].setVal( 0 );
+  int cnt = cellCount / 2;
+  for(int i=0; i<cellCount;i++)
+      cells[i].setVal( 0 );
   while(cnt>0){
-    int i = rand()%rows;
-    int j = rand()%cols;
-    if(cells[i*cols+j].getVal()==0){
-      cells[i*cols+j].setVal(1);
+    int i = rand()%cellCount;
+    if(cells[i].getVal()==0){
+      cells[i].setVal(1);
       cnt--;
     }
   }
@@ -78,10 +87,16 @@ void World::update(float dt){
       boardX += 2*dt;
       if ( boardX > targetX ){
         boardX = targetX;
+        for(int i=0; i<cellCount;i++)
+          cells[i].setState(Cell::CS_OPENING);
         state = OPEN;
       }
     }break;
     case OPEN:
+      for(int i=0; i<cellCount;i++)
+        cells[i].update(dt);
+      if (cells[0].getState() == Cell::CS_OPENED )
+        state = SHOW;
       break;
     case SHOW:
       break;

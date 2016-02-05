@@ -21,6 +21,7 @@
     <ClCompile Include="..\..\MemoryMatrix\jni\Global.cpp" />
     <ClCompile Include="..\..\MemoryMatrix\jni\main.cpp" />
     <ClCompile Include="..\..\MemoryMatrix\jni\Menu.cpp" />
+    <ClCompile Include="..\..\MemoryMatrix\jni\PerformanceTimer.cpp" />
     <ClCompile Include="..\..\MemoryMatrix\jni\Primitives.cpp" />
     <ClCompile Include="..\..\MemoryMatrix\jni\ResourceManager.cpp" />
     <ClCompile Include="..\..\MemoryMatrix\jni\Settings.cpp" />
@@ -38,6 +39,7 @@
     <ClInclude Include="..\..\MemoryMatrix\jni\GLHelper.h" />
     <ClInclude Include="..\..\MemoryMatrix\jni\Global.h" />
     <ClInclude Include="..\..\MemoryMatrix\jni\Menu.h" />
+    <ClInclude Include="..\..\MemoryMatrix\jni\PerformanceTimer.h" />
     <ClInclude Include="..\..\MemoryMatrix\jni\Primitives.h" />
     <ClInclude Include="..\..\MemoryMatrix\jni\ResourceManager.h" />
     <ClInclude Include="..\..\MemoryMatrix\jni\Settings.h" />

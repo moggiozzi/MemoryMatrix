@@ -71,7 +71,7 @@ public:
   static void drawLine2d(GLint x1, GLint y1, GLint x2, GLint y2);
   static void drawCircleSector2d(GLint x, GLint y, GLint r, GLfloat a1, GLfloat a2, uint points_number=16);
   static void drawTriangle2d(GLint x1, GLint y1, GLint x2, GLint y2, GLint x3, GLint y3);
-  static void drawRect2d(GLint x1, GLint y1, GLint x2, GLint y2);
+  static void drawRect2d(GLint x1, GLint y1, GLint w, GLint h);
   
   static void drawTexture(Texture* texture, int dx, int dy, int dw=-1, int dh=-1,
     int tx=0, int ty=0, int tw=-1, int th=-1);

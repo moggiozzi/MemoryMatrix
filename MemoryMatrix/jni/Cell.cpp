@@ -5,10 +5,10 @@
 float Cell::animSpeed = 2.0;
 
 Cell::Cell(int val) : animPart(0.0), state(CS_CLOSED){
-  (val==0) ? value = EMPTY : value = SELECTED;
+  (val==0) ? value = CV_EMPTY : value = CV_SELECTED;
 }
 void Cell::setVal(int val){
-  (val==0) ? value = EMPTY : value = SELECTED;
+  (val==0) ? value = CV_EMPTY : value = CV_SELECTED;
 }
 
 void Cell::update(float dt){
@@ -23,8 +23,10 @@ void Cell::update(float dt){
       break;
     case CS_CLOSING:
       animPart += animSpeed*dt;
-      if ( animPart >= 1.0 )
+      if ( animPart >= 1.0 ){
         state = CS_CLOSED;
+        animPart = 1.0;
+      }
       break;
   }
 }
@@ -35,15 +37,19 @@ void Cell::draw( int x, int y, int size ){
     case CS_CLOSING: //todo
     case CS_CLOSED:
       GLHelper::setColor(settings.colorCellClosed);
-      GLHelper::drawRect2d( x, y, x+size, y+size);
+      GLHelper::drawRect2d( x, y, size, size);
       break;
-    case CS_OPENING: //todo
-    case CS_OPENED:
-      if (value == EMPTY)
-        GLHelper::setColor(settings.colorCellError);
+    case CS_OPENING:{
+      if (animPart < 0.5)
+        GLHelper::setColor(settings.colorCellClosed);
       else
-        GLHelper::setColor(settings.colorCellFull);
-      GLHelper::drawRect2d( x, y, x+size, y+size);
+        GLHelper::setColor(value == CV_EMPTY ? settings.colorCellEmpty : settings.colorCellFull);
+      float k = (animPart <= 0.5) ? 1 - 2*animPart : 2*animPart-1;
+      GLHelper::drawRect2d( x + (size - size*k)/2, y, size*k, size);
+      }break;
+    case CS_OPENED:
+      GLHelper::setColor(value == CV_EMPTY ? settings.colorCellEmpty : settings.colorCellFull);
+      GLHelper::drawRect2d( x , y, size, size);
       break;
     //case CS_OPENING:
     //  break;

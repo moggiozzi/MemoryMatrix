@@ -209,16 +209,16 @@ void GLHelper::drawTriangle2d(GLint x1, GLint y1, GLint x2, GLint y2, GLint x3, 
   glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-void GLHelper::drawRect2d(GLint x1, GLint y1, GLint x2, GLint y2){
+void GLHelper::drawRect2d(GLint x1, GLint y1, GLint w, GLint h){
   glEnableClientState(GL_VERTEX_ARRAY);
   points_[0]=xToGl(x1);
   points_[1]=yToGl(y1);
-  points_[2]=xToGl(x2);
+  points_[2]=xToGl(x1+w);
   points_[3]=yToGl(y1);
-  points_[4]=xToGl(x2);
-  points_[5]=yToGl(y2);
+  points_[4]=xToGl(x1+w);
+  points_[5]=yToGl(y1+h);
   points_[6]=xToGl(x1);
-  points_[7]=yToGl(y2);
+  points_[7]=yToGl(y1+h);
   glVertexPointer( 2, GL_FLOAT, 0, points_ ); //2 координаты на точку
   glDrawArrays( GL_TRIANGLE_FAN, 0, 4 );
   glDisableClientState(GL_VERTEX_ARRAY);
