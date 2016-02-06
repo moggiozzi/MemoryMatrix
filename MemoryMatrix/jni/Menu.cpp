@@ -27,20 +27,20 @@ bool Menu::init(){
 }
 
 void Menu::draw(){
-  GLHelper::setColor(1.f,1.f,1.f);
-  GLHelper::drawText(50,50,"Hello");
-  GameState gs = getGameState();
-  switch (gs)
-  {
-  case GS_MENU:
-    break;
-  case GS_PAUSE:
-    break;
-  case GS_GAMEOVER:
-    break;
-  default:
-    break;
-  }
+  //GLHelper::setColor(1.f,1.f,1.f);
+  //GLHelper::drawText(50,50,"Hello");
+  //GameState gs = getGameState();
+  //switch (gs)
+  //{
+  //case GS_MENU:
+  //  break;
+  //case GS_PAUSE:
+  //  break;
+  //case GS_GAMEOVER:
+  //  break;
+  //default:
+  //  break;
+  //}
 }
 
 void Menu::touch(int x, int y){

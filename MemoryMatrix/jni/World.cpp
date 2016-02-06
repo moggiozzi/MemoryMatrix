@@ -17,6 +17,12 @@ namespace{
   enum WorldState{ WS_APPEAR, WS_OPEN, WS_SHOW, WS_CLOSE, WS_HIDDEN, WS_OPEN_RESULT, WS_SHOW_RESULT, WS_LEAVE } state;
   Cell cells[ Settings::MAX_ROWS * Settings::MAX_COLS ];
   int currentLevel;
+
+  //ќткрыты все €чейки без ошибок - уровень вверх
+  //Ѕыли ошибки - остатьс€ на текущем уровне
+  //¬торой раз с ошибками - уровень вниз
+  bool withMistake;
+  bool prevWithMistake;
 }
 
 void calcSizes(){
@@ -48,6 +54,7 @@ void World::reshape(){
 }
 
 bool World::init(){
+  withMistake = prevWithMistake = false;
   currentLevel = 1;
   initLevel();
   calcSizes();
@@ -57,6 +64,8 @@ bool World::init(){
 }
 
 void World::initLevel(){
+  prevWithMistake = withMistake;
+  withMistake = false;
   rows = ( currentLevel - 1 ) / 2 + 2;
   cols = currentLevel / 2 + 2;
   calcSizes();
@@ -86,12 +95,13 @@ void World::draw(bool isActive){
         devY + borderSize + i*cellSize + borderSize,
         cellSize - 2*borderSize);
     }
-  if(!isActive)
-    return;
-  static char scoreText[16];
+  static char text[16];
   GLHelper::setColor(0.f,1.f,0.f);
-  sprintf(scoreText,"Score: %d", score);
-  GLHelper::drawText(0,16,scoreText);
+  sprintf(text,"Level %d", currentLevel);
+  GLHelper::drawText( 0, 16, text );
+
+  sprintf(text,"Score %d", score);
+  GLHelper::drawText( 0, 32, text );
 }
 
 void World::update(float dt){
@@ -170,7 +180,9 @@ void World::update(float dt){
         boardX += 2*dt;
         if ( GLHelper::glToX( boardX ) > GLHelper::getWidth() )
         {
-          currentLevel++;
+          if ( !withMistake )
+            currentLevel++;
+          else if ( prevWithMistake && currentLevel > 1 ) currentLevel--;
           initLevel();
           boardX = GLHelper::xToGl(-boardSize); // board hidden to left
           state = WS_APPEAR;
@@ -192,6 +204,12 @@ void World::touch(int x, int y){
       {
         if ( cells[ r * cols + c ].getState() == Cell::CS_CLOSED ){
           cells[ r * cols + c ].setState( Cell::CellState::CS_OPENING, true );
+          if ( cells[ r * cols + c ].getVal() == 0 )
+          {
+            score -= 10;
+            withMistake = true;
+          } else
+            score += 10;
         }
       }
     }break;
