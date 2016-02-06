@@ -11,7 +11,7 @@ public:
   void update(float dt){}
   void draw();
   void touch(int x, int y);
-  bool keyDown(uint keyCode);
+  //bool keyDown(uint keyCode);
 };
 
 #endif

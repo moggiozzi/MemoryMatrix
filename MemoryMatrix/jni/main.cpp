@@ -219,8 +219,6 @@ void handleInput( unsigned char keyCode, int mouseX, int mouseY )
   game.keyDown( keyCode );
   if (keyCode=='f')
     glutFullScreenToggle();
-  if (keyCode==KEY_ESC)
-    exit(0);
 }
 
 void Idle(void)
@@ -282,7 +280,7 @@ void initGlut(int argc, char* argv[]){
   nWindow = glutCreateWindow("MemoryMatrix");
 
   glutKeyboardFunc( handleInput );
-  glutSpecialFunc( handleInput );
+  glutSpecialFunc( handleInput ); // для обработки спец клавиш (стрелки в том числе)
   glutMouseFunc( handleMouse );
 
   glutDisplayFunc( draw );

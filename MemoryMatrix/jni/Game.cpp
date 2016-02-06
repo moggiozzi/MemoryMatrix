@@ -6,17 +6,15 @@
 #include "GameState.h"
 
 Game::Game(){}
-Texture bgTex;
+
 bool Game::init(){
   isInit = true;
   setGameState(GS_MENU);
-  isInit = isInit && menu.init();
   isInit = isInit && world.init();
   int sId;
   //isInit = isInit && AudioHelper::open("res/main.ogg",sId);
-  AudioHelper::update();
+  //AudioHelper::update();
   //AudioHelper::play(sId,false); // todo true
-
   //ResourceManager::loadImage("res/bg.png",&bgTex);
   return isInit;
 }
@@ -37,11 +35,9 @@ void Game::draw(){
     world.draw();
     break;
   case GS_PAUSE:
-    world.draw(true);
     menu.draw();
     break;
-  case GS_MENU: case GS_GAMEOVER:
-    world.draw(false);
+  case GS_MENU: //case GS_GAMEOVER:
     menu.draw();
     break;
   }
@@ -50,8 +46,6 @@ void Game::draw(){
 }
 
 void Game::update(float dt){
-  world.update(dt);
-  return;
   if ( dt <= 0 ) // ???
     return;
   if(dt>0.06f)
@@ -59,42 +53,33 @@ void Game::update(float dt){
   fps.add(dt);
   GameState gState = getGameState();
   switch (gState){
-  case GS_INITLEVEL:
-    world.initLevel();
-    setGameState( GS_INGAME );
-    break;
   case GS_INGAME:
     world.update(dt);
-    break;
-  case GS_MENU:
-    if( gState != getPrevGameState() ){
-      setGameState(gState); // to change prevGameState
-      world.initLevel();
-    }break;
-  default:
-    menu.update(dt);
     break;
   }
 }
 void Game::reshape(){ world.reshape(); }
 bool Game::keyDown(uint keyCode){
-  if (keyCode == KEY_ESC){
-    setGameState(GS_PAUSE);
-    return true;
+  GameState gState = getGameState();
+  if ( keyCode == KEY_ESC){
+    if (gState == GS_INGAME || gState == GS_GAMEOVER)
+      setGameState(GS_PAUSE);
+    if (gState == GS_MENU)
+      exit(0);
   }
+  return true;
 }
 
 void Game::touch(int x, int y){
-  world.touch(x,y);
-  //GameState gState = getGameState();
-  //switch (gState){
-  //case GS_INGAME:
-  //    world.touch(x,y);
-  //  break;
-  //default:
-  //    menu.touch(x,y);
-  //  break;
-  //}
+  GameState gState = getGameState();
+  switch (gState){
+  case GS_INGAME:
+      world.touch(x,y);
+    break;
+  default:
+      menu.touch(x,y);
+    break;
+  }
 }
 
 void Game::accel(float x, float y, float z){

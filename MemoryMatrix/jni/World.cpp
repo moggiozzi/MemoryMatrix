@@ -120,7 +120,7 @@ void World::update(float dt){
     }break;
     case WS_OPEN:
       pt.Stop();
-      if ( pt.CntSeconds() < 1 ) break;
+      if ( pt.CntSeconds() < 0.5 ) break;
       for(int i=0; i<cellCount;i++)
         cells[i].update(dt);
       if (cells[0].getState() == Cell::CS_OPENED ){
