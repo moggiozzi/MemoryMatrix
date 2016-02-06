@@ -230,15 +230,18 @@ void Idle(void)
 
 void handleReshape(int x, int y)
 {
-  glViewport(0,0,x,y);
   // !!!КОСТЫЛЬ!!! оконное приложение не рисует 4 верхних пиксела http://stackoverflow.com/questions/13403853/glut-wrong-mouse-coordinates
   if ( glutGet(GLUT_WINDOW_WIDTH) < glutGet(GLUT_SCREEN_WIDTH) &&
     glutGet(GLUT_WINDOW_HEIGHT) < glutGet(GLUT_SCREEN_HEIGHT) )
   {
-    glViewport( 0, -4, x, y-4 );
+    glViewport( 0, 0, x-8, y-8 );
+    GLHelper::setWidth(x-8);
+    GLHelper::setHeight(y-8);
+  } else {
+    glViewport( 0, 0, x, y );
+    GLHelper::setWidth(x);
+    GLHelper::setHeight(y);
   }
-  GLHelper::setWidth(x);
-  GLHelper::setHeight(y);
   GLHelper::setParams();
   game.reshape();
 }

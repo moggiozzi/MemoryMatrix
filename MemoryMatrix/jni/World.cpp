@@ -16,6 +16,7 @@ namespace{
   float boardX, boardY;
   enum WorldState{ WS_APPEAR, WS_OPEN, WS_SHOW, WS_CLOSE, WS_HIDDEN, WS_OPEN_RESULT, WS_SHOW_RESULT, WS_LEAVE } state;
   Cell cells[ Settings::MAX_ROWS * Settings::MAX_COLS ];
+  int currentLevel;
 }
 
 void calcSizes(){
@@ -47,16 +48,17 @@ void World::reshape(){
 }
 
 bool World::init(){
-  rows = 2;
-  cols = 2;
+  currentLevel = 1;
+  initLevel();
   calcSizes();
   state = WorldState::WS_APPEAR;
   //ResourceManager::loadImage("res/character.png",&charTex);
-  initLevel();
   return true;
 }
 
 void World::initLevel(){
+  rows = ( currentLevel - 1 ) / 2 + 2;
+  cols = currentLevel / 2 + 2;
   calcSizes();
   for(int i=0; i<cellCount;i++){
     cells[i].setVal( 0 );
@@ -139,7 +141,7 @@ void World::update(float dt){
         if ( cells[i].getState()==Cell::CS_OPENED )
           openedCellCount++;
       }
-      if ( openedCellCount == cellCount / 2 ){
+      if ( openedCellCount >= cellCount / 2 ){
         for(int i=0; i<cellCount;i++){
           if ( cells[i].getState()==Cell::CS_CLOSED )
             cells[i].setState( Cell::CS_OPENING );
@@ -168,10 +170,7 @@ void World::update(float dt){
         boardX += 2*dt;
         if ( GLHelper::glToX( boardX ) > GLHelper::getWidth() )
         {
-          if ( rows >= cols )
-            cols++;
-          else
-            rows++;
+          currentLevel++;
           initLevel();
           boardX = GLHelper::xToGl(-boardSize); // board hidden to left
           state = WS_APPEAR;
