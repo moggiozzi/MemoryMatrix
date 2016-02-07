@@ -228,7 +228,7 @@ void Idle(void)
 
 void handleReshape(int x, int y)
 {
-  // !!!КОСТЫЛЬ!!! оконное приложение не рисует 4 верхних пиксела http://stackoverflow.com/questions/13403853/glut-wrong-mouse-coordinates
+  // !!!КОСТЫЛЬ!!! оконное приложение не корректно определяет размер канваса http://stackoverflow.com/questions/13403853/glut-wrong-mouse-coordinates
   if ( glutGet(GLUT_WINDOW_WIDTH) < glutGet(GLUT_SCREEN_WIDTH) &&
     glutGet(GLUT_WINDOW_HEIGHT) < glutGet(GLUT_SCREEN_HEIGHT) )
   {

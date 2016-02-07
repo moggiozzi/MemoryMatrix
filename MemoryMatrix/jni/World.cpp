@@ -23,6 +23,9 @@ namespace{
   //Второй раз с ошибками - уровень вниз
   bool withMistake;
   bool prevWithMistake;
+
+  int mistakeCount;
+  const int MAX_MISTAKES = 3;
 }
 
 void calcSizes(){
@@ -55,10 +58,12 @@ void World::reshape(){
 
 bool World::init(){
   withMistake = prevWithMistake = false;
+  mistakeCount = 0;
   currentLevel = 1;
+  score = 0;
+  state = WorldState::WS_APPEAR;
   initLevel();
   calcSizes();
-  state = WorldState::WS_APPEAR;
   //ResourceManager::loadImage("res/character.png",&charTex);
   return true;
 }
@@ -102,6 +107,28 @@ void World::draw(bool isActive){
 
   sprintf(text,"Score %d", score);
   GLHelper::drawText( 0, 32, text );
+
+  GLHelper::setColor(0.3f,0.3f,0.3f);
+  for(int i=0;i<MAX_MISTAKES;i++){
+    GLHelper::drawRect2d( 16 + i * 16, 48, 14, 14 );
+  }
+  GLHelper::setColor(1.f,0.f,0.f);
+  for(int i=0;i<mistakeCount;i++){
+    GLHelper::drawRect2d( 16 + i * 16, 48, 14, 14 );
+  }
+  if ( state == WS_SHOW_RESULT ){
+    //todo TopScore
+    GLHelper::setColor(0.f,1.f,0.f);
+    sprintf(text,"Score %d", score);
+    GLHelper::drawText( 100, GLHelper::getHeight()/2, text );
+  }
+}
+
+void openAllCells(){
+  for(int i=0; i<cellCount;i++){
+    if ( cells[i].getState()==Cell::CS_CLOSED )
+      cells[i].setState( Cell::CS_OPENING );
+  }
 }
 
 void World::update(float dt){
@@ -146,16 +173,16 @@ void World::update(float dt){
       break;
     case WS_HIDDEN:{
       int openedCellCount = 0;
+      int inAnimation = false;
       for(int i=0; i<cellCount;i++){
         cells[i].update(dt);
-        if ( cells[i].getState()==Cell::CS_OPENED )
+        if ( cells[i].getVal()==Cell::CV_SELECTED && cells[i].getState()==Cell::CS_OPENED )
           openedCellCount++;
+        if ( cells[i].getState() == Cell::CS_OPENING )
+          inAnimation = true;
       }
-      if ( openedCellCount >= cellCount / 2 ){
-        for(int i=0; i<cellCount;i++){
-          if ( cells[i].getState()==Cell::CS_CLOSED )
-            cells[i].setState( Cell::CS_OPENING );
-        }
+      if ( openedCellCount >= cellCount / 2 || (!inAnimation && mistakeCount >= MAX_MISTAKES) ){
+        openAllCells();
         state = WS_OPEN_RESULT;
       }
     }break;
@@ -171,8 +198,6 @@ void World::update(float dt){
         state = WS_LEAVE;
       }
     } break;
-    //case WS_SHOW_RESULT:
-    //  break;
     case WS_LEAVE:
       pt.Stop();
       if ( pt.CntSeconds() > 1 )
@@ -180,15 +205,20 @@ void World::update(float dt){
         boardX += 2*dt;
         if ( GLHelper::glToX( boardX ) > GLHelper::getWidth() )
         {
+          if ( mistakeCount >= MAX_MISTAKES ){
+            state = WS_SHOW_RESULT;
+            break;
+          }
           if ( !withMistake )
             currentLevel++;
           else if ( prevWithMistake && currentLevel > 1 ) currentLevel--;
           initLevel();
-          boardX = GLHelper::xToGl(-boardSize); // board hidden to left
           state = WS_APPEAR;
         }
       }
     break;
+    case WS_SHOW_RESULT:
+      break;
   }
 }
 
@@ -206,13 +236,17 @@ void World::touch(int x, int y){
           cells[ r * cols + c ].setState( Cell::CellState::CS_OPENING, true );
           if ( cells[ r * cols + c ].getVal() == 0 )
           {
-            score -= 10;
             withMistake = true;
+			if (mistakeCount < MAX_MISTAKES)
+              mistakeCount++;
           } else
-            score += 10;
+            score += 1;
         }
       }
     }break;
+    case WS_SHOW_RESULT:
+      init();
+      break;
   }
 }
 
