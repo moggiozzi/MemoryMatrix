@@ -1,16 +1,15 @@
 #ifndef WORLD_H_
 #define WORLD_H_
 
-#ifndef GLHELPER_H_
-#include "GLHelper.h"
+#ifndef GLOBAL_H_
+#include "Global.h"
 #endif
 
 class World{
-  uint score;
 public:
   World() {}
   ~World(){}
-  //Vector2f getSize(){return size;}
+
   bool init();
   void initLevel();
   void draw(bool isActive=true);

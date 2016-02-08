@@ -7,6 +7,8 @@ ColorRGB Settings::colorCellFull(0.2f,0.8f,0.2f);
 ColorRGB Settings::colorCellError(1.0f,0.0f,0.0f);
 ColorRGB Settings::colorBoard(0.2f,0.2f,0.2f);
 ColorRGB Settings::colorBackground(0.0f,0.0f,0.0f);
+ColorRGB Settings::colorText(0.f,1.f,1.f);
+ColorRGB Settings::colorResultScore(1.f,1.f,0.f);
 
 Settings settings;
 

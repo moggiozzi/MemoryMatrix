@@ -37,6 +37,8 @@ public:
   static ColorRGB colorCellError;  // открытая ошибочно
   static ColorRGB colorBoard;      // доска
   static ColorRGB colorBackground; // фон
+  static ColorRGB colorText;
+  static ColorRGB colorResultScore;
   static const int MAX_ROWS = 8;
   static const int MAX_COLS = 8;
 };

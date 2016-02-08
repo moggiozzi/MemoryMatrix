@@ -26,6 +26,10 @@ namespace{
 
   int mistakeCount;
   const int MAX_MISTAKES = 3;
+
+  uint score;
+  const int MAX_TOP_SCORES = 5;
+  int topScores[MAX_TOP_SCORES]={0,0,0,0,0};
 }
 
 void calcSizes(){
@@ -71,8 +75,8 @@ bool World::init(){
 void World::initLevel(){
   prevWithMistake = withMistake;
   withMistake = false;
-  rows = ( currentLevel - 1 ) / 2 + 2;
-  cols = currentLevel / 2 + 2;
+  rows = std::min(Settings::MAX_ROWS, ( currentLevel - 1 ) / 2 + 2);
+  cols = std::min(Settings::MAX_COLS, currentLevel / 2 + 2);
   calcSizes();
   for(int i=0; i<cellCount;i++){
     cells[i].setVal( 0 );
@@ -90,7 +94,6 @@ void World::initLevel(){
 }
 
 void World::draw(bool isActive){
-  GLHelper::setColor(0.6f,0.6f,1.0f);
   int devX = GLHelper::glToX(boardX);
   int devY = GLHelper::glToY(boardY);
   for(int i=0;i<rows;i++)
@@ -101,7 +104,7 @@ void World::draw(bool isActive){
         cellSize - 2*borderSize);
     }
   static char text[16];
-  GLHelper::setColor(0.f,1.f,0.f);
+  GLHelper::setColor(Settings::colorText);
   sprintf(text,"Level %d", currentLevel);
   GLHelper::drawText( 0, 16, text );
 
@@ -116,11 +119,19 @@ void World::draw(bool isActive){
   for(int i=0;i<mistakeCount;i++){
     GLHelper::drawRect2d( 16 + i * 16, 48, 14, 14 );
   }
-  if ( state == WS_SHOW_RESULT ){
-    //todo TopScore
-    GLHelper::setColor(0.f,1.f,0.f);
-    sprintf(text,"Score %d", score);
-    GLHelper::drawText( 100, GLHelper::getHeight()/2, text );
+  if ( state == WS_SHOW_RESULT )
+  {
+    int textSize = GLHelper::getHeight() / (MAX_TOP_SCORES + 1);
+    GLHelper::setColor(Settings::colorText);
+    GLHelper::drawText( (GLHelper::getWidth() - 3 * textSize)/2, 0, "Top", textSize );
+    for(int i=0;i<MAX_TOP_SCORES;i++){
+      if(topScores[i]==score)
+        GLHelper::setColor(Settings::colorResultScore);
+      else
+        GLHelper::setColor(Settings::colorText);
+      sprintf(text,"%d.%4d", i+1, topScores[i]);
+      GLHelper::drawText( (GLHelper::getWidth() - 6*textSize)/2, (i+1)*textSize, text, textSize );
+    }
   }
 }
 
@@ -128,6 +139,16 @@ void openAllCells(){
   for(int i=0; i<cellCount;i++){
     if ( cells[i].getState()==Cell::CS_CLOSED )
       cells[i].setState( Cell::CS_OPENING );
+  }
+}
+
+void updateTopScore(){
+  for(int i=0;i<MAX_TOP_SCORES;i++)
+  {
+    if ( topScores[i] <= score ) {
+      topScores[i] = score;
+      break;
+    }
   }
 }
 
@@ -206,6 +227,7 @@ void World::update(float dt){
         if ( GLHelper::glToX( boardX ) > GLHelper::getWidth() )
         {
           if ( mistakeCount >= MAX_MISTAKES ){
+            updateTopScore();
             state = WS_SHOW_RESULT;
             break;
           }
@@ -223,7 +245,6 @@ void World::update(float dt){
 }
 
 void World::touch(int x, int y){
-  LOGI("x:%d y:%d",x,y);
   switch(state){
     case WS_HIDDEN:{
       int boardDevX = GLHelper::glToX(boardX);

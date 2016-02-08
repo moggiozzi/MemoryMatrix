@@ -29,7 +29,7 @@ bool Menu::init(){
 }
 
 void Menu::draw(){
-  GLHelper::setColor(1.f,1.f,1.f);
+  GLHelper::setColor(Settings::colorText);
   GameState gs = getGameState();
   int strHeight = GLHelper::getHeight() / 5;
   int symSize = std::min( strHeight, GLHelper::getWidth() / 13 );
