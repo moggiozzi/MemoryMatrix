@@ -46,9 +46,9 @@ void calcSizes(){
     case WS_CLOSE:
     case WS_HIDDEN:
     case WS_OPEN_RESULT:
-    case WS_SHOW_RESULT:
       boardX = GLHelper::xToGl(( GLHelper::getWidth() - boardSize ) / 2);
     break;
+    case WS_SHOW_RESULT:
     case WS_APPEAR:
     case WS_LEAVE:
       boardX = GLHelper::xToGl(-boardSize); // board hidden to left
@@ -143,13 +143,20 @@ void openAllCells(){
 }
 
 void updateTopScore(){
+  int minIdx = 0;
+  for(int i=1;i<MAX_TOP_SCORES;i++)
+    if ( topScores[i] < topScores[minIdx] )
+      minIdx = i;
+  topScores[minIdx] = score;
+  // sort
   for(int i=0;i<MAX_TOP_SCORES;i++)
-  {
-    if ( topScores[i] <= score ) {
-      topScores[i] = score;
-      break;
+    for(int j=i+1;j<MAX_TOP_SCORES;j++){
+      if(topScores[i]<topScores[j]){
+        int tmp = topScores[i];
+        topScores[i]=topScores[j];
+        topScores[j]=tmp;
+      }
     }
-  }
 }
 
 void World::update(float dt){

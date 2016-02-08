@@ -54,6 +54,10 @@ void Game::update(float dt){
   GameState gState = getGameState();
   switch (gState){
   case GS_INGAME:
+    if (getPrevGameState()!=gState){
+      world.init();
+      setGameState(gState); // reset prevGameState
+    }
     world.update(dt);
     break;
   }
@@ -62,10 +66,9 @@ void Game::reshape(){ world.reshape(); }
 bool Game::keyDown(uint keyCode){
   GameState gState = getGameState();
   if ( keyCode == KEY_ESC){
-    if (gState == GS_INGAME || gState == GS_GAMEOVER)
-      setGameState(GS_PAUSE);
     if (gState == GS_MENU)
       exit(0);
+    setGameState(GS_MENU);
   }
   return true;
 }
