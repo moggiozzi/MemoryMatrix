@@ -38,7 +38,7 @@ public:
   void load(const char* fileName);
   uint getSaveDataSize();
   void saveTo(char *data);
-  void loadFrom(const char *data, const char * const dataEnd);
+  void loadFrom(const char *data, const uint len);
 };
 
 #endif // GAME_H_

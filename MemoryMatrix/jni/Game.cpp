@@ -89,22 +89,11 @@ void Game::accel(float x, float y, float z){
 }
 
 uint Game::getSaveDataSize(){
-  return world.getSaveDataSize()+sizeof(char);
+  return 0;
 }
 void Game::saveTo(char* data){
-  data[0] = getGameState();
-  if ( data[0] == GS_PAUSE )
-    world.saveTo(&data[1]);
 }
-void Game::loadFrom(const char *data, const char * const dataEnd){
-  if ( data == dataEnd ) {
-    return;
-  }
-  char state = data[0];
-  if ( state == GS_PAUSE ){
-    setGameState( GS_PAUSE );
-    world.loadFrom(&data[1], dataEnd);
-  }
+void Game::loadFrom(const char *data, const uint len){
 }
 
 void Game::save(const char* fileName){
@@ -127,8 +116,7 @@ void Game::load(const char* fileName){
   rewind (file);
   char *buf = new char[size];
   fread(buf,1,size,file);
-  const char * const dataEnd = &buf[0]+size;
-  loadFrom( buf, dataEnd );
+  loadFrom( buf, size );
   fclose(file);
   delete[] buf;
 }

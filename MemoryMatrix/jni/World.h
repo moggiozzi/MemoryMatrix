@@ -20,9 +20,8 @@ public:
   void touch(int x, int y);
   //void accel(float x, float y, float z);
   
-  uint getSaveDataSize();
-  void saveTo(char *data);
-  void loadFrom(const char *data, const char * const dataEnd);
+  void save();
+  void load();
 };
 
 #endif // WORLD_H_

@@ -29,7 +29,9 @@ namespace{
 
   uint score;
   const int MAX_TOP_SCORES = 5;
-  int topScores[MAX_TOP_SCORES]={0,0,0,0,0};
+  uint topScores[MAX_TOP_SCORES]={0,0,0,0,0};
+
+  const char * saveFile = "save.dat";
 }
 
 void calcSizes(){
@@ -61,6 +63,7 @@ void World::reshape(){
 }
 
 bool World::init(){
+  load();
   withMistake = prevWithMistake = false;
   mistakeCount = 0;
   currentLevel = 1;
@@ -235,6 +238,7 @@ void World::update(float dt){
         {
           if ( mistakeCount >= MAX_MISTAKES ){
             updateTopScore();
+            save();
             state = WS_SHOW_RESULT;
             break;
           }
@@ -278,16 +282,18 @@ void World::touch(int x, int y){
   }
 }
 
-uint World::getSaveDataSize(){
-  return 1;
-}
-void World::saveTo(char *data){
-  data[0] = 0xFA;
-}
-void World::loadFrom(const char *data, const char * const dataEnd){
-  int s = 1;
-  if (dataEnd < data+1) {
-    LOGI("Error: World::loadFrom() not valid data");
+void World::save(){
+  FILE *file = fopen(saveFile,"w");
+  if (file==0)
     return;
-  }
+  size_t n = fwrite( topScores, 1, sizeof(topScores), file );
+  fclose(file);
+}
+
+void World::load(){
+  FILE *file = fopen(saveFile,"r");
+  if (file==0)
+    return;
+  size_t n = fread( topScores, 1, sizeof(topScores), file );
+  fclose(file);
 }
