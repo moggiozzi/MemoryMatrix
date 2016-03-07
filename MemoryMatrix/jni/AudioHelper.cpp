@@ -96,7 +96,9 @@ bool AudioHelper::open(const char *file, int& soundId, bool isStreamed){
   if(fdPlayerObject != NULL){
     soundId = lastSoundId;
     sounds.insert(std::make_pair<int,SLObjectItf>(lastSoundId++,fdPlayerObject));
+	return false;
   }
+  return true;
 }
 
 void AudioHelper::play(int soundId, bool isLoop){
