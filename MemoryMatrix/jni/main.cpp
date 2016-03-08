@@ -129,7 +129,7 @@ void android_main(struct android_app* state) {
 #endif
   struct engine engine;
   // Make sure glue isn't stripped.
-  app_dummy();
+  //app_dummy();
 
   memset(&engine, 0, sizeof(engine));
   state->userData = &engine;

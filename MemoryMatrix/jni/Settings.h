@@ -11,6 +11,9 @@ enum ControlMode {
 	//CM_BUTTONS,
 	CM_COUNT };
 
+#define MAX_ROWS 8
+#define MAX_COLS 8
+
 class Settings
 {
   //должен совпадать с android:screenOrientation="landscape|portrait"
@@ -39,8 +42,6 @@ public:
   static ColorRGB colorBackground; // фон
   static ColorRGB colorText;
   static ColorRGB colorResultScore;
-  static const int MAX_ROWS = 8;
-  static const int MAX_COLS = 8;
 };
 
 extern Settings settings;

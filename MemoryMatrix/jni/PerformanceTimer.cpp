@@ -157,7 +157,7 @@ double PerformanceTimer::CntMicroseconds() const
   
   #elif defined(__linux__)
   timespec diff = timespec_diff( beg_, end_ );
-  double microSeconds = (int64)diff.tv_sec * 1000000 + diff.tv_nsec / 1000;
+  double microSeconds = (int64_t)diff.tv_sec * 1000000 + diff.tv_nsec / 1000;
   return microSeconds;
   #else
   return 0.0;
@@ -174,7 +174,7 @@ uint32_t PerformanceTimer::CntMicrosecondsUint() const
   
   #elif defined(__linux__)
   timespec diff = timespec_diff( beg_, end_ );
-  uint microSeconds = (uint) ( (int64)diff.tv_sec * 1000000 + diff.tv_nsec / 1000 );
+  uint microSeconds = (uint) ( (int64_t)diff.tv_sec * 1000000 + diff.tv_nsec / 1000 );
   return microSeconds;
   #else
   return 0;

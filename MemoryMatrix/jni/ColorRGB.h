@@ -5,7 +5,7 @@
 class ColorRGB
 {
 public:
-  ColorRGB::ColorRGB(float _r, float _g, float _b);
+  ColorRGB(float _r, float _g, float _b);
   float r;
   float g;
   float b;

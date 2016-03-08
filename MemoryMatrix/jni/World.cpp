@@ -15,7 +15,7 @@ namespace{
   int rows, cols, cellCount;
   float boardX, boardY;
   enum WorldState{ WS_APPEAR, WS_OPEN, WS_SHOW, WS_CLOSE, WS_HIDDEN, WS_OPEN_RESULT, WS_SHOW_RESULT, WS_LEAVE } state;
-  Cell cells[ Settings::MAX_ROWS * Settings::MAX_COLS ];
+  Cell cells[MAX_ROWS * MAX_COLS];
   int currentLevel;
 
   //ќткрыты все €чейки без ошибок - уровень вверх
@@ -68,7 +68,7 @@ bool World::init(){
   mistakeCount = 0;
   currentLevel = 1;
   score = 0;
-  state = WorldState::WS_APPEAR;
+  state = WS_APPEAR;
   initLevel();
   calcSizes();
   //ResourceManager::loadImage("res/character.png",&charTex);
@@ -78,8 +78,8 @@ bool World::init(){
 void World::initLevel(){
   prevWithMistake = withMistake;
   withMistake = false;
-  rows = std::min(Settings::MAX_ROWS, ( currentLevel - 1 ) / 2 + 2);
-  cols = std::min(Settings::MAX_COLS, currentLevel / 2 + 2);
+  rows = std::min(MAX_ROWS, ( currentLevel - 1 ) / 2 + 2);
+  cols = std::min(MAX_COLS, currentLevel / 2 + 2);
   calcSizes();
   for(int i=0; i<cellCount;i++){
     cells[i].setVal( 0 );
@@ -265,7 +265,7 @@ void World::touch(int x, int y){
       if ( x > boardDevX && y > boardDevY && c >= 0 && c < cols && r >= 0 && r < rows )
       {
         if ( cells[ r * cols + c ].getState() == Cell::CS_CLOSED ){
-          cells[ r * cols + c ].setState( Cell::CellState::CS_OPENING, true );
+          cells[ r * cols + c ].setState( Cell::CS_OPENING, true );
           if ( cells[ r * cols + c ].getVal() == 0 )
           {
             withMistake = true;

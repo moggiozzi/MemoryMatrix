@@ -3,7 +3,7 @@
 
 #ifdef __ANDROID__
 #include <jni.h>
-#include <android_native_app_glue.h>
+#include "android_native_app_glue.h"
 #include <android/log.h>
 
 #ifndef NDEBUG

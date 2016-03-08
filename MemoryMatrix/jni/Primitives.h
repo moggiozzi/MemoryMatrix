@@ -5,6 +5,7 @@
 #include "Global.h"
 #endif
 #include <algorithm>
+#include <math.h>
 
 #ifdef __ANDROID__
 #define KEY_ESC   AKEYCODE_BACK
